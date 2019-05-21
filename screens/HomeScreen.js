@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Image,
   Platform,
   ScrollView,
   StyleSheet,
@@ -8,14 +7,80 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Icon, Card, Button } from 'react-native-elements';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
+import TimePicker from '../components/TimePicker';
 
 export default class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isDateTimePickerVisible: false,
+      date: '',
+    };
+  }
+
   static navigationOptions = {
     header: null,
   };
+
+  showDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: true });
+  };
+
+  hideDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: false });
+  };
+
+  setAlarmDate = date => {
+    this.setState({ date });
+    console.log('A date has been picked: ', date);
+  };
+
+  _renderClock() {
+    const { isDateTimePickerVisible, date } = this.state;
+
+    if (date) {
+      return (
+        <View style={styles.welcomeContainer}>
+          <Card title="CLOCK">
+            <Text style={{ marginBottom: 10 }}>
+              {date.getHours()} 時 {date.getMinutes()} 分
+            </Text>
+            <Button
+              backgroundColor="#03A9F4"
+              buttonStyle={{
+                borderRadius: 0,
+                marginLeft: 0,
+                marginRight: 0,
+                marginBottom: 0,
+              }}
+              title="action"
+            />
+          </Card>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.createTimePickerContainer}>
+          <TimePicker
+            isDateTimePickerVisible={isDateTimePickerVisible}
+            hideDateTimePicker={this.hideDateTimePicker}
+            setAlarmDate={this.setAlarmDate}
+          />
+          <Icon
+            reverse
+            name="ios-add"
+            type="ionicon"
+            color="#f50"
+            onPress={() => this.setState({ isDateTimePickerVisible: true })}
+          />
+        </View>
+      );
+    }
+  }
 
   render() {
     return (
@@ -24,7 +89,9 @@ export default class HomeScreen extends React.Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
-          <View style={styles.welcomeContainer}>
+          {this._renderClock()}
+
+          {/* <View style={styles.welcomeContainer}>
             <Image
               source={
                 __DEV__
@@ -62,10 +129,10 @@ export default class HomeScreen extends React.Component {
                 Help, it didn’t automatically reload!
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </ScrollView>
 
-        <View style={styles.tabBarInfoContainer}>
+        {/* <View style={styles.tabBarInfoContainer}>
           <Text style={styles.tabBarInfoText}>
             This is a tab bar. You can edit it in:
           </Text>
@@ -77,7 +144,7 @@ export default class HomeScreen extends React.Component {
               navigation/MainTabNavigator.js
             </MonoText>
           </View>
-        </View>
+        </View> */}
       </View>
     );
   }
@@ -131,7 +198,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   contentContainer: {
-    paddingTop: 30,
+    paddingTop: 150,
   },
   welcomeContainer: {
     alignItems: 'center',
@@ -148,6 +215,9 @@ const styles = StyleSheet.create({
   getStartedContainer: {
     alignItems: 'center',
     marginHorizontal: 50,
+  },
+  createTimePickerContainer: {
+    alignItems: 'center',
   },
   homeScreenFilename: {
     marginVertical: 7,
