@@ -1,11 +1,18 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { ExpoLinksView } from '@expo/samples';
+// import { WebBrowser } from 'expo';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
     title: 'Links',
   };
+
+  // _handleHelpPress = () => {
+  //   WebBrowser.openBrowserAsync(
+  //     'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
+  //   );
+  // };
 
   render() {
     return (
