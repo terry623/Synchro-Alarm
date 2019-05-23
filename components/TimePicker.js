@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 export default class DateTimePickerTester extends Component {
@@ -13,7 +13,7 @@ export default class DateTimePickerTester extends Component {
     const { isDateTimePickerVisible, hideDateTimePicker } = this.props;
 
     return (
-      <Fragment>
+      <View>
         <Text style={styles.container}>設定一個鬧鐘</Text>
         <DateTimePicker
           isVisible={isDateTimePickerVisible}
@@ -21,7 +21,7 @@ export default class DateTimePickerTester extends Component {
           onConfirm={this.handleDatePicked}
           onCancel={hideDateTimePicker}
         />
-      </Fragment>
+      </View>
     );
   }
 }

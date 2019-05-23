@@ -1,8 +1,9 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Icon, Card, Button, Input, ListItem } from 'react-native-elements';
 
 import TimePicker from '../components/TimePicker';
+import Alarm from '../components/Alarm';
 
 export default class HomeScreen extends Component {
   state = {
@@ -10,27 +11,13 @@ export default class HomeScreen extends Component {
     isInviting: false,
     date: '',
     friend: '',
-    text: '',
+    // FIXME: 測試帳號
+    text: 'terry623',
+    isAlarmVisible: false,
   };
 
   static navigationOptions = {
     header: null,
-  };
-
-  showDateTimePicker = () => {
-    this.setState({ isDateTimePickerVisible: true });
-  };
-
-  hideDateTimePicker = () => {
-    this.setState({ isDateTimePickerVisible: false });
-  };
-
-  openInvite = () => {
-    this.setState({ isInviting: true });
-  };
-
-  closeInvite = () => {
-    this.setState({ isInviting: false });
   };
 
   setAlarmDate = date => {
@@ -39,14 +26,18 @@ export default class HomeScreen extends Component {
   };
 
   sendInvitation = () => {
-    // FIXME: 先為了測試
-    this.setState({ friend: this.state.text });
-    this.closeInvite();
+    // FIXME: 為了測試
+    this.setState({ friend: this.state.text, isInviting: false });
+  };
+
+  closeAlarm = () => {
+    this.setState({ isAlarmVisible: false });
   };
 
   renderClock = () => {
     const {
       isDateTimePickerVisible,
+      isAlarmVisible,
       isInviting,
       date,
       friend,
@@ -65,10 +56,10 @@ export default class HomeScreen extends Component {
                 <Button
                   backgroundColor="#03A9F4"
                   title="邀請"
-                  onPress={this.openInvite}
+                  onPress={() => this.setState({ isInviting: true })}
                 />
               ) : (
-                <Fragment>
+                <View>
                   <Input
                     placeholder="你朋友的帳號"
                     shake
@@ -79,20 +70,32 @@ export default class HomeScreen extends Component {
                     backgroundColor="#03A9F4"
                     style={styles.inviteButton}
                     title="送出"
-                    onPress={this.sendInvitation}
+                    onPress={() => this.setState({ isAlarmVisible: true })}
                   />
-                </Fragment>
+                  <Alarm
+                    isAlarmVisible={isAlarmVisible}
+                    friend={friend}
+                    closeAlarm={this.closeAlarm}
+                  />
+                </View>
               )
             ) : (
-              <ListItem
-                title={friend}
-                leftAvatar={{
-                  source: {
-                    uri:
-                      'https://semantic-ui.com/images/avatar/large/elliot.jpg',
-                  },
-                }}
-              />
+              <View>
+                <ListItem
+                  title={friend}
+                  leftAvatar={{
+                    source: {
+                      uri:
+                        'https://semantic-ui.com/images/avatar/large/elliot.jpg',
+                    },
+                  }}
+                />
+                <Button
+                  backgroundColor="#03A9F4"
+                  title="直接響"
+                  onPress={this.callAlarm}
+                />
+              </View>
             )}
           </Card>
         </View>
@@ -102,7 +105,9 @@ export default class HomeScreen extends Component {
         <View style={styles.createTimePickerContainer}>
           <TimePicker
             isDateTimePickerVisible={isDateTimePickerVisible}
-            hideDateTimePicker={this.hideDateTimePicker}
+            hideDateTimePicker={() =>
+              this.setState({ isDateTimePickerVisible: false })
+            }
             setAlarmDate={this.setAlarmDate}
           />
           <Icon
@@ -123,6 +128,7 @@ export default class HomeScreen extends Component {
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
+          keyboardShouldPersistTaps="handled"
         >
           {this.renderClock()}
         </ScrollView>
