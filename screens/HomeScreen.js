@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Icon, Card, Button, Input } from 'react-native-elements';
-import Modal from 'react-native-modal';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Icon, Card, Button, Input, ListItem } from 'react-native-elements';
 
 import TimePicker from '../components/TimePicker';
 
@@ -10,7 +9,8 @@ export default class HomeScreen extends Component {
     isDateTimePickerVisible: false,
     isInviting: false,
     date: '',
-    friend: null,
+    friend: '',
+    text: '',
   };
 
   static navigationOptions = {
@@ -39,12 +39,19 @@ export default class HomeScreen extends Component {
   };
 
   sendInvitation = () => {
-    console.log('sendInvitation');
+    // FIXME: 先為了測試
+    this.setState({ friend: this.state.text });
     this.closeInvite();
   };
 
   renderClock = () => {
-    const { isDateTimePickerVisible, isInviting, date, friend } = this.state;
+    const {
+      isDateTimePickerVisible,
+      isInviting,
+      date,
+      friend,
+      text,
+    } = this.state;
 
     if (date) {
       return (
@@ -62,7 +69,12 @@ export default class HomeScreen extends Component {
                 />
               ) : (
                 <Fragment>
-                  <Input placeholder="你朋友的 Email" shake />
+                  <Input
+                    placeholder="你朋友的帳號"
+                    shake
+                    onChangeText={text => this.setState({ text })}
+                    value={text}
+                  />
                   <Button
                     backgroundColor="#03A9F4"
                     style={styles.inviteButton}
@@ -72,7 +84,15 @@ export default class HomeScreen extends Component {
                 </Fragment>
               )
             ) : (
-              <Text>{friend.name}</Text>
+              <ListItem
+                title={friend}
+                leftAvatar={{
+                  source: {
+                    uri:
+                      'https://semantic-ui.com/images/avatar/large/elliot.jpg',
+                  },
+                }}
+              />
             )}
           </Card>
         </View>
