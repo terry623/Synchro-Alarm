@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Icon, Card, Button, Input, ListItem } from 'react-native-elements';
 
+import color from '../constants/Colors';
+
 import TimePicker from '../components/TimePicker';
 import Alarm from '../components/Alarm';
 
@@ -30,11 +32,16 @@ export default class HomeScreen extends Component {
     this.setState({ friend: this.state.text, isInviting: false });
   };
 
+  callAlarm = () => {
+    console.log(this.state.isAlarmVisible);
+    this.setState({ isAlarmVisible: true });
+  };
+
   closeAlarm = () => {
     this.setState({ isAlarmVisible: false });
   };
 
-  renderClock = () => {
+  render() {
     const {
       isDateTimePickerVisible,
       isAlarmVisible,
@@ -44,85 +51,6 @@ export default class HomeScreen extends Component {
       text,
     } = this.state;
 
-    if (date) {
-      return (
-        <View style={styles.alarmContainer}>
-          <Card
-            containerStyle={styles.alarmCard}
-            title={`${date.getHours()} 時 ${date.getMinutes()} 分`}
-          >
-            {!friend ? (
-              !isInviting ? (
-                <Button
-                  backgroundColor="#03A9F4"
-                  title="邀請"
-                  onPress={() => this.setState({ isInviting: true })}
-                />
-              ) : (
-                <View>
-                  <Input
-                    placeholder="你朋友的帳號"
-                    shake
-                    onChangeText={text => this.setState({ text })}
-                    value={text}
-                  />
-                  <Button
-                    backgroundColor="#03A9F4"
-                    style={styles.inviteButton}
-                    title="送出"
-                    onPress={() => this.setState({ isAlarmVisible: true })}
-                  />
-                  <Alarm
-                    isAlarmVisible={isAlarmVisible}
-                    friend={friend}
-                    closeAlarm={this.closeAlarm}
-                  />
-                </View>
-              )
-            ) : (
-              <View>
-                <ListItem
-                  title={friend}
-                  leftAvatar={{
-                    source: {
-                      uri:
-                        'https://semantic-ui.com/images/avatar/large/elliot.jpg',
-                    },
-                  }}
-                />
-                <Button
-                  backgroundColor="#03A9F4"
-                  title="直接響"
-                  onPress={this.callAlarm}
-                />
-              </View>
-            )}
-          </Card>
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.createTimePickerContainer}>
-          <TimePicker
-            isDateTimePickerVisible={isDateTimePickerVisible}
-            hideDateTimePicker={() =>
-              this.setState({ isDateTimePickerVisible: false })
-            }
-            setAlarmDate={this.setAlarmDate}
-          />
-          <Icon
-            reverse
-            name="ios-add"
-            type="ionicon"
-            color="#f50"
-            onPress={() => this.setState({ isDateTimePickerVisible: true })}
-          />
-        </View>
-      );
-    }
-  };
-
-  render() {
     return (
       <View style={styles.container}>
         <ScrollView
@@ -130,7 +58,78 @@ export default class HomeScreen extends Component {
           contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="handled"
         >
-          {this.renderClock()}
+          {date ? (
+            <View style={styles.alarmContainer}>
+              <Card
+                containerStyle={styles.alarmCard}
+                title={`${date.getHours()} 時 ${date.getMinutes()} 分`}
+              >
+                {!friend ? (
+                  !isInviting ? (
+                    <Button
+                      backgroundColor={color.tintColor}
+                      title="邀請"
+                      onPress={() => this.setState({ isInviting: true })}
+                    />
+                  ) : (
+                    <View>
+                      <Input
+                        placeholder="你朋友的帳號"
+                        shake
+                        onChangeText={text => this.setState({ text })}
+                        value={text}
+                      />
+                      <Button
+                        backgroundColor={color.tintColor}
+                        style={styles.inviteButton}
+                        title="送出"
+                        onPress={this.sendInvitation}
+                      />
+                    </View>
+                  )
+                ) : (
+                  <View>
+                    <ListItem
+                      title={friend}
+                      leftAvatar={{
+                        source: {
+                          uri:
+                            'https://semantic-ui.com/images/avatar/large/elliot.jpg',
+                        },
+                      }}
+                    />
+                    <Button
+                      backgroundColor={color.tintColor}
+                      title="直接響"
+                      onPress={this.callAlarm}
+                    />
+                  </View>
+                )}
+                <Alarm
+                  isAlarmVisible={isAlarmVisible}
+                  friend={friend}
+                  closeAlarm={this.closeAlarm}
+                />
+              </Card>
+            </View>
+          ) : (
+            <View style={styles.createTimePickerContainer}>
+              <TimePicker
+                isDateTimePickerVisible={isDateTimePickerVisible}
+                hideDateTimePicker={() =>
+                  this.setState({ isDateTimePickerVisible: false })
+                }
+                setAlarmDate={this.setAlarmDate}
+              />
+              <Icon
+                reverse
+                name="ios-add"
+                type="ionicon"
+                color={color.buttonColor}
+                onPress={() => this.setState({ isDateTimePickerVisible: true })}
+              />
+            </View>
+          )}
         </ScrollView>
       </View>
     );

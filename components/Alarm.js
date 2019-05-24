@@ -4,6 +4,7 @@ import { Overlay, Text } from 'react-native-elements';
 
 import Chat from './Chat';
 
+// FIXME: 題目之後要放在 Server 端 ( JSON )
 const allTopics = [
   ['真是', '適合', '起床', '的日子'],
   ['非常', '苦悶', '的生活', '啊'],

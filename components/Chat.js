@@ -34,7 +34,7 @@ export default class Chat extends Component {
         system: true,
       };
       messages.unshift(systemMessage);
-      // closeAlarm();
+      setTimeout(() => closeAlarm(), 4000);
     }
 
     this.setState(previousState => ({
