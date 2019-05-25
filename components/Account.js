@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Overlay, Text, Input, Icon, Button } from 'react-native-elements';
+import { connect } from 'react-redux';
 
 import color from '../constants/Colors';
 
-export default class Account extends Component {
+class Account extends Component {
   state = {
     isAccountVisible: true,
     toLogin: true,
@@ -12,14 +13,13 @@ export default class Account extends Component {
     password: '',
   };
 
-  signUp = () => {
-    const { username, password } = this.state;
-    console.log({ username, password });
-  };
+  signUpOrLogIn = () => {
+    const { toLogin, username, password } = this.state;
+    const { socket } = this.props;
 
-  logIn = () => {
-    const { username, password } = this.state;
-    console.log({ username, password });
+    toLogin
+      ? socket.emit('logIn', username, password)
+      : socket.emit('register', username, password);
   };
 
   render() {
@@ -56,7 +56,7 @@ export default class Account extends Component {
             <Button
               title="送出"
               raised
-              onPress={toLogin ? this.logIn : this.signUp}
+              onPress={this.signUpOrLogIn}
               containerStyle={styles.buttonContainer}
               buttonStyle={styles.button}
             />
@@ -129,3 +129,7 @@ const styles = StyleSheet.create({
     color: color.tintColor,
   },
 });
+
+export default connect(state => ({
+  ...state.env,
+}))(Account);
