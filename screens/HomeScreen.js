@@ -67,21 +67,20 @@ export default class HomeScreen extends Component {
                 {!friend ? (
                   !isInviting ? (
                     <Button
-                      backgroundColor={color.tintColor}
                       title="邀請"
+                      buttonStyle={styles.button}
                       onPress={() => this.setState({ isInviting: true })}
                     />
                   ) : (
                     <View>
                       <Input
                         placeholder="你朋友的帳號"
-                        shake
                         onChangeText={text => this.setState({ text })}
                         value={text}
                       />
                       <Button
-                        backgroundColor={color.tintColor}
-                        style={styles.inviteButton}
+                        containerStyle={styles.inviteButton}
+                        buttonStyle={styles.button}
                         title="送出"
                         onPress={this.sendInvitation}
                       />
@@ -99,8 +98,8 @@ export default class HomeScreen extends Component {
                       }}
                     />
                     <Button
-                      backgroundColor={color.tintColor}
                       title="直接響"
+                      buttonStyle={styles.button}
                       onPress={this.callAlarm}
                     />
                   </View>
@@ -140,6 +139,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  button: {
+    backgroundColor: color.tintColor,
   },
   contentContainer: {
     paddingTop: 150,
