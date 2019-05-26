@@ -25,7 +25,7 @@ const SocketEndpoint = 'http://synchro-alarm-server.us-west-2.elasticbeanstalk.c
 class Main extends Component {
   state = {
     isLoadingComplete: false,
-    isAnswer: true,
+    isAnswer: false,
     beInvited: false,
     alarmDetail: {
       friend: '',
