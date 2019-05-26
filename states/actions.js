@@ -3,6 +3,7 @@ import {
   SET_LOGIN,
   SET_USERNAME,
   SET_ALARM_DETAIL,
+  OPEN_ALARM,
 } from './actionTypes';
 
 export const setSocket = socket => ({
@@ -23,4 +24,9 @@ export const setLogin = isLogin => ({
 export const setAlarmDetail = alarmDetail => ({
   type: SET_ALARM_DETAIL,
   payload: { alarmDetail },
+});
+
+export const openAlarm = isAlarmVisible => ({
+  type: OPEN_ALARM,
+  payload: { isAlarmVisible },
 });

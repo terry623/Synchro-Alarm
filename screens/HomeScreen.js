@@ -10,6 +10,7 @@ import {
 } from 'react-native-elements';
 import { connect } from 'react-redux';
 
+import { openAlarm } from '../states/actions';
 import color from '../constants/Colors';
 import TimePicker from '../components/TimePicker';
 import Alarm from '../components/Alarm';
@@ -25,9 +26,7 @@ class HomeScreen extends Component {
     isDateTimePickerVisible: false,
     isInviting: false,
     date: '',
-    // FIXME: 測試帳號
-    text: 'terry623',
-    isAlarmVisible: false,
+    text: '',
     selectedIndex: 0,
   };
 
@@ -56,21 +55,13 @@ class HomeScreen extends Component {
     );
   };
 
-  callAlarm = () => {
-    this.setState({ isAlarmVisible: true });
-  };
-
-  closeAlarm = () => {
-    this.setState({ isAlarmVisible: false });
-  };
-
   render() {
     const {
       alarmDetail: { friend },
+      openAlarm: openAlarmFromProps,
     } = this.props;
     const {
       isDateTimePickerVisible,
-      isAlarmVisible,
       isInviting,
       date,
       text,
@@ -129,14 +120,13 @@ class HomeScreen extends Component {
                         },
                       }}
                     />
-                    <Button title="直接響" onPress={this.callAlarm} />
+                    <Button
+                      title="直接響"
+                      onPress={() => openAlarmFromProps(true)}
+                    />
                   </View>
                 )}
-                <Alarm
-                  isAlarmVisible={isAlarmVisible}
-                  friend={friend}
-                  closeAlarm={this.closeAlarm}
-                />
+                <Alarm />
               </Card>
             </View>
           ) : (
@@ -190,7 +180,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(state => ({
-  ...state.user,
-  ...state.alarm,
-}))(HomeScreen);
+export default connect(
+  state => ({
+    ...state.user,
+    ...state.alarm,
+  }),
+  { openAlarm }
+)(HomeScreen);

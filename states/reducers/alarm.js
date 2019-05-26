@@ -1,6 +1,7 @@
-import { SET_ALARM_DETAIL } from '../actionTypes';
+import { SET_ALARM_DETAIL, OPEN_ALARM } from '../actionTypes';
 
 const initialState = {
+  isAlarmVisible: false,
   alarmDetail: {
     friend: '',
     questionType: '',
@@ -16,6 +17,13 @@ const alarm = (state = initialState, action) => {
       return {
         ...state,
         alarmDetail,
+      };
+    }
+    case OPEN_ALARM: {
+      const { isAlarmVisible } = action.payload;
+      return {
+        ...state,
+        isAlarmVisible,
       };
     }
     default:

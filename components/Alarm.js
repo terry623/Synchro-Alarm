@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Overlay, Text } from 'react-native-elements';
+import { connect } from 'react-redux';
 
 import Chat from './Chat';
 
@@ -10,9 +11,9 @@ const allTopics = [
   ['非常', '苦悶', '的生活', '啊'],
 ];
 
-export default class Alarm extends Component {
+class Alarm extends Component {
   render() {
-    const { isAlarmVisible, closeAlarm, friend } = this.props;
+    const { isAlarmVisible } = this.props;
     const randTopic = allTopics[Math.floor(Math.random() * allTopics.length)];
 
     return (
@@ -33,7 +34,7 @@ export default class Alarm extends Component {
               )
             </Text>
           </View>
-          <Chat friend={friend} topic={randTopic} closeAlarm={closeAlarm} />
+          <Chat topic={randTopic} />
         </View>
       </Overlay>
     );
@@ -61,3 +62,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
+
+export default connect(state => ({
+  ...state.alarm,
+}))(Alarm);

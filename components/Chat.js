@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import UUID from 'uuid/v4';
+import { connect } from 'react-redux';
 
-export default class Chat extends Component {
+import { openAlarm } from '../states/actions';
+
+class Chat extends Component {
   state = {
     messages: [],
     answer: '',
   };
 
   onSend(messages = []) {
-    const { closeAlarm, friend, topic } = this.props;
+    const { topic, friend, openAlarm: openAlarmFromProps } = this.props;
 
     const otherMessage = {
       _id: UUID(),
@@ -34,7 +37,7 @@ export default class Chat extends Component {
         system: true,
       };
       messages.unshift(systemMessage);
-      setTimeout(() => closeAlarm(), 4000);
+      setTimeout(() => openAlarmFromProps(false), 4000);
     }
 
     this.setState(previousState => ({
@@ -55,3 +58,10 @@ export default class Chat extends Component {
     );
   }
 }
+
+export default connect(
+  state => ({
+    ...state.alarm,
+  }),
+  { openAlarm }
+)(Chat);

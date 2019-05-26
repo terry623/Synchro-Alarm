@@ -5,17 +5,18 @@ import { connect } from 'react-redux';
 import { Overlay, Text, Button } from 'react-native-elements';
 const io = require('socket.io-client');
 
-import color from './constants/Colors';
+import color from '../constants/Colors';
 
 import {
   setSocket,
   setUserName,
   setLogin,
   setAlarmDetail,
-} from './states/actions';
-import AppNavigator from './navigation/AppNavigator';
-import Account from './components/Account';
-import { websocket } from './constants/Warning';
+  openAlarm,
+} from '../states/actions';
+import AppNavigator from '../navigation/AppNavigator';
+import Account from './Account';
+import { websocket } from '../constants/Warning';
 YellowBox.ignoreWarnings([websocket]);
 
 const SocketEndpoint = 'http://192.168.1.107:3000';
@@ -37,6 +38,7 @@ class Main extends Component {
       setSocket: setSocketFromProps,
       setUserName: setUserNameFromProps,
       setLogin: setLoginFromProps,
+      openAlarm: openAlarmFromProps,
     } = this.props;
 
     const socket = io(SocketEndpoint, {
@@ -81,19 +83,32 @@ class Main extends Component {
     socket.on('replyMatching', response => {
       console.log('replyMatching', response);
     });
+
+    socket.on('ring', () => {
+      openAlarmFromProps(true);
+    });
   }
 
   replyMatch = isAgree => {
-    const { setAlarmDetail: setAlarmDetailFromProps } = this.props;
+    const {
+      socket,
+      userName,
+      setAlarmDetail: setAlarmDetailFromProps,
+    } = this.props;
     const { alarmDetail } = this.state;
 
-    // FIXME: 要使用 replyMatching 回應
     if (isAgree) {
       this.setState({ beInvited: false });
       setAlarmDetailFromProps(alarmDetail);
-    } else {
-      console.log('Refuse');
     }
+
+    socket.emit(
+      'replyMatching',
+      userName,
+      alarmDetail.friend,
+      alarmDetail.matchingId,
+      isAgree.toString()
+    );
   };
 
   render() {
@@ -101,8 +116,10 @@ class Main extends Component {
     const {
       isLoadingComplete,
       beInvited,
-      alarmDetail: { friend, questionType, alarmTime },
+      alarmDetail: { friend, alarmTime },
     } = this.state;
+
+    const date = new Date(alarmTime * 1000);
 
     return !isLoadingComplete && !skipLoadingScreen ? (
       <AppLoading
@@ -119,7 +136,9 @@ class Main extends Component {
           <View style={styles.inviteBlock}>
             <View style={styles.inviteMessageBlock}>
               <Text style={styles.inviteMessage}>{friend} 邀請你</Text>
-              <Text style={styles.inviteMessage}>{alarmTime} 一同起床</Text>
+              <Text style={styles.inviteMessage}>
+                {date.getHours()} 時 {date.getMinutes()} 分起床
+              </Text>
             </View>
             <View style={styles.buttonGroup}>
               <Button
@@ -147,7 +166,7 @@ class Main extends Component {
         ...Icon.Ionicons.font,
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
-        'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+        'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
       }),
     ]);
   };
@@ -196,6 +215,8 @@ const styles = StyleSheet.create({
 });
 
 export default connect(
-  state => ({}),
-  { setSocket, setUserName, setLogin, setAlarmDetail }
+  state => ({
+    ...state.user,
+  }),
+  { setSocket, setUserName, setLogin, setAlarmDetail, openAlarm }
 )(Main);
