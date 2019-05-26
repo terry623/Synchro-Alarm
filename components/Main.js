@@ -20,7 +20,7 @@ import Account from './Account';
 // import { websocket } from '../constants/Warning';
 // YellowBox.ignoreWarnings([websocket]);
 
-const SocketEndpoint = 'http://192.168.1.108:3000';
+const SocketEndpoint = 'http://synchro-alarm-server.us-west-2.elasticbeanstalk.com/';
 
 class Main extends Component {
   state = {
