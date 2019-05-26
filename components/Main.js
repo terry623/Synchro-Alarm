@@ -13,6 +13,7 @@ import {
   setLogin,
   setAlarmDetail,
   openAlarm,
+  setTopics,
 } from '../states/actions';
 import AppNavigator from '../navigation/AppNavigator';
 import Account from './Account';
@@ -39,6 +40,8 @@ class Main extends Component {
       setUserName: setUserNameFromProps,
       setLogin: setLoginFromProps,
       openAlarm: openAlarmFromProps,
+      setTopics: setTopicsFromProps,
+      setAlarmDetail: setAlarmDetailFromProps,
     } = this.props;
 
     const socket = io(SocketEndpoint, {
@@ -75,32 +78,37 @@ class Main extends Component {
         const { user1, questionType, alarmTime, matchingId } = response;
         this.setState({
           beInvited: true,
-          alarmDetail: { friend: user1, questionType, alarmTime, matchingId },
+          alarmDetail: {
+            friend: user1,
+            questionType,
+            alarmTime,
+            matchingId,
+            topics: [],
+          },
         });
       }
     });
 
     socket.on('replyMatching', response => {
       console.log('replyMatching', response);
+      const { alarmDetail } = this.state;
+      const { payload } = response;
+
+      if (payload) {
+        setAlarmDetailFromProps(alarmDetail);
+      }
     });
 
-    socket.on('ring', () => {
+    socket.on('ring', response => {
+      const { payload } = response;
       openAlarmFromProps(true);
+      setTopicsFromProps(payload);
     });
   }
 
   replyMatch = isAgree => {
-    const {
-      socket,
-      userName,
-      setAlarmDetail: setAlarmDetailFromProps,
-    } = this.props;
+    const { socket, userName } = this.props;
     const { alarmDetail } = this.state;
-
-    if (isAgree) {
-      this.setState({ beInvited: false });
-      setAlarmDetailFromProps(alarmDetail);
-    }
 
     socket.emit(
       'replyMatching',
@@ -109,6 +117,8 @@ class Main extends Component {
       alarmDetail.matchingId,
       isAgree.toString()
     );
+
+    this.setState({ beInvited: false });
   };
 
   render() {
@@ -119,7 +129,8 @@ class Main extends Component {
       alarmDetail: { friend, alarmTime },
     } = this.state;
 
-    const date = new Date(alarmTime * 1000);
+    // FIXME: 有錯
+    const date = new Date((new Date().getTime() + alarmTime) * 1000);
 
     return !isLoadingComplete && !skipLoadingScreen ? (
       <AppLoading
@@ -136,9 +147,9 @@ class Main extends Component {
           <View style={styles.inviteBlock}>
             <View style={styles.inviteMessageBlock}>
               <Text style={styles.inviteMessage}>{friend} 邀請你</Text>
-              <Text style={styles.inviteMessage}>
+              {/* <Text style={styles.inviteMessage}>
                 {date.getHours()} 時 {date.getMinutes()} 分起床
-              </Text>
+              </Text> */}
             </View>
             <View style={styles.buttonGroup}>
               <Button
@@ -218,5 +229,5 @@ export default connect(
   state => ({
     ...state.user,
   }),
-  { setSocket, setUserName, setLogin, setAlarmDetail, openAlarm }
+  { setSocket, setUserName, setLogin, setAlarmDetail, openAlarm, setTopics }
 )(Main);

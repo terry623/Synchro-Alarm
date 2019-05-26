@@ -5,16 +5,12 @@ import { connect } from 'react-redux';
 
 import Chat from './Chat';
 
-// FIXME: 題目之後要放在 Server 端 ( JSON )
-const allTopics = [
-  ['真是', '適合', '起床', '的日子'],
-  ['非常', '苦悶', '的生活', '啊'],
-];
-
 class Alarm extends Component {
   render() {
-    const { isAlarmVisible } = this.props;
-    const randTopic = allTopics[Math.floor(Math.random() * allTopics.length)];
+    const {
+      isAlarmVisible,
+      alarmDetail: { topics },
+    } = this.props;
 
     return (
       <Overlay
@@ -25,16 +21,13 @@ class Alarm extends Component {
         <View style={styles.view}>
           <View style={styles.alarmView}>
             <Text style={styles.title}>拼句子</Text>
+            <Text style={styles.topic}>{topics[0]}</Text>
             <Text style={styles.topic}>
-              {randTopic.filter((value, index) => index % 2 === 0).join(' / ')}
-            </Text>
-            {/* FIXME: 為了測試 */}
-            <Text style={styles.topic}>
-              ({randTopic.filter((value, index) => index % 2 !== 0).join(' / ')}
-              )
+              {/* FIXME: 自己邀請自己 => 就會有 topics[1] */}
+              {topics[1] && `(對方 : ${topics[1]})`}
             </Text>
           </View>
-          <Chat topic={randTopic} />
+          <Chat />
         </View>
       </Overlay>
     );

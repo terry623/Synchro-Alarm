@@ -4,6 +4,7 @@ import {
   SET_USERNAME,
   SET_ALARM_DETAIL,
   OPEN_ALARM,
+  SET_TOPICS,
 } from './actionTypes';
 
 export const setSocket = socket => ({
@@ -29,4 +30,9 @@ export const setAlarmDetail = alarmDetail => ({
 export const openAlarm = isAlarmVisible => ({
   type: OPEN_ALARM,
   payload: { isAlarmVisible },
+});
+
+export const setTopics = topic => ({
+  type: SET_TOPICS,
+  payload: { topic },
 });

@@ -27,7 +27,7 @@ class HomeScreen extends Component {
     isInviting: false,
     date: '',
     text: '',
-    selectedIndex: 0,
+    selectedIndex: 2,
   };
 
   static navigationOptions = {
