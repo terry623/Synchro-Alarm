@@ -13,18 +13,19 @@ import {
   setLogin,
   setAlarmDetail,
   openAlarm,
-  setTopics,
+  setTopic,
 } from '../states/actions';
 import AppNavigator from '../navigation/AppNavigator';
 import Account from './Account';
-import { websocket } from '../constants/Warning';
-YellowBox.ignoreWarnings([websocket]);
+// import { websocket } from '../constants/Warning';
+// YellowBox.ignoreWarnings([websocket]);
 
-const SocketEndpoint = 'http://192.168.1.107:3000';
+const SocketEndpoint = 'http://192.168.1.108:3000';
 
 class Main extends Component {
   state = {
     isLoadingComplete: false,
+    isAnswer: true,
     beInvited: false,
     alarmDetail: {
       friend: '',
@@ -40,7 +41,7 @@ class Main extends Component {
       setUserName: setUserNameFromProps,
       setLogin: setLoginFromProps,
       openAlarm: openAlarmFromProps,
-      setTopics: setTopicsFromProps,
+      setTopic: setTopicFromProps,
       setAlarmDetail: setAlarmDetailFromProps,
     } = this.props;
 
@@ -83,7 +84,7 @@ class Main extends Component {
             questionType,
             alarmTime,
             matchingId,
-            topics: [],
+            topic: '',
           },
         });
       }
@@ -95,14 +96,24 @@ class Main extends Component {
       const { payload } = response;
 
       if (payload) {
-        setAlarmDetailFromProps(alarmDetail);
+        // FIXME: alarmId 在 redux 加
+        setAlarmDetailFromProps({ ...alarmDetail, alarmId: payload.alarmId });
       }
     });
 
     socket.on('ring', response => {
       const { payload } = response;
       openAlarmFromProps(true);
-      setTopicsFromProps(payload);
+      setTopicFromProps(payload);
+    });
+
+    socket.on('answer', response => {
+      const { msg } = response;
+      console.log({ response });
+      if (msg === 'success') {
+        openAlarmFromProps(false);
+        this.setState({ isAnswer: true });
+      }
     });
   }
 
@@ -126,11 +137,12 @@ class Main extends Component {
     const {
       isLoadingComplete,
       beInvited,
+      isAnswer,
       alarmDetail: { friend, alarmTime },
     } = this.state;
 
     // FIXME: 有錯
-    const date = new Date((new Date().getTime() + alarmTime) * 1000);
+    // const date = new Date((new Date().getTime() + alarmTime) * 1000);
 
     return !isLoadingComplete && !skipLoadingScreen ? (
       <AppLoading
@@ -140,6 +152,18 @@ class Main extends Component {
       />
     ) : (
       <View style={styles.container}>
+        <Overlay height={200} isVisible={isAnswer}>
+          <View style={styles.inviteBlock}>
+            <View style={styles.inviteMessageBlock}>
+              <Text style={styles.inviteMessage}>正確答案!</Text>
+              <Button
+                containerStyle={styles.buttonContainer}
+                title="關閉"
+                onPress={() => this.setState({ isAnswer: false })}
+              />
+            </View>
+          </View>
+        </Overlay>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <AppNavigator />
         <Account />
@@ -201,7 +225,6 @@ const styles = StyleSheet.create({
   buttonGroup: {
     marginTop: 'auto',
   },
-
   refuseButton: {
     backgroundColor: color.tabIconDefault,
   },
@@ -227,7 +250,15 @@ const styles = StyleSheet.create({
 
 export default connect(
   state => ({
+    ...state.alarm,
     ...state.user,
   }),
-  { setSocket, setUserName, setLogin, setAlarmDetail, openAlarm, setTopics }
+  {
+    setSocket,
+    setUserName,
+    setLogin,
+    setAlarmDetail,
+    openAlarm,
+    setTopic,
+  }
 )(Main);

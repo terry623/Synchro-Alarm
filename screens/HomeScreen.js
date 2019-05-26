@@ -126,7 +126,6 @@ class HomeScreen extends Component {
                     />
                   </View>
                 )}
-                <Alarm />
               </Card>
             </View>
           ) : (
@@ -147,6 +146,7 @@ class HomeScreen extends Component {
               />
             </View>
           )}
+          <Alarm />
         </ScrollView>
       </View>
     );

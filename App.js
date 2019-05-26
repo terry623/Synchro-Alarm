@@ -6,6 +6,8 @@ import store from './states/store';
 import Main from './components/Main';
 import color from './constants/Colors';
 
+console.disableYellowBox = true;
+
 const theme = {
   Button: {
     buttonStyle: {

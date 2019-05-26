@@ -1,4 +1,9 @@
-import { SET_ALARM_DETAIL, OPEN_ALARM, SET_TOPICS } from '../actionTypes';
+import {
+  SET_ALARM_DETAIL,
+  OPEN_ALARM,
+  SET_TOPIC,
+  SET_IS_ANSWER,
+} from '../actionTypes';
 
 const initialState = {
   isAlarmVisible: false,
@@ -7,7 +12,7 @@ const initialState = {
     questionType: '',
     alarmTime: '',
     matchingId: '',
-    topics: [],
+    topic: '',
   },
 };
 
@@ -27,11 +32,14 @@ const alarm = (state = initialState, action) => {
         isAlarmVisible,
       };
     }
-    case SET_TOPICS: {
+    case SET_TOPIC: {
       const { topic } = action.payload;
       return {
         ...state,
-        topics: state.alarmDetail.topics.push(topic),
+        alarmDetail: {
+          ...state.alarmDetail,
+          topic,
+        },
       };
     }
     default:

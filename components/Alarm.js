@@ -9,7 +9,7 @@ class Alarm extends Component {
   render() {
     const {
       isAlarmVisible,
-      alarmDetail: { topics },
+      alarmDetail: { topic },
     } = this.props;
 
     return (
@@ -21,11 +21,7 @@ class Alarm extends Component {
         <View style={styles.view}>
           <View style={styles.alarmView}>
             <Text style={styles.title}>拼句子</Text>
-            <Text style={styles.topic}>{topics[0]}</Text>
-            <Text style={styles.topic}>
-              {/* FIXME: 自己邀請自己 => 就會有 topics[1] */}
-              {topics[1] && `(對方 : ${topics[1]})`}
-            </Text>
+            <Text style={styles.topic}>{topic}</Text>
           </View>
           <Chat />
         </View>
