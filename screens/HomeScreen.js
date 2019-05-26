@@ -1,21 +1,34 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Icon, Card, Button, Input, ListItem } from 'react-native-elements';
+import {
+  Icon,
+  Card,
+  Button,
+  Input,
+  ListItem,
+  ButtonGroup,
+} from 'react-native-elements';
+import { connect } from 'react-redux';
 
 import color from '../constants/Colors';
-
 import TimePicker from '../components/TimePicker';
 import Alarm from '../components/Alarm';
 
-export default class HomeScreen extends Component {
+const buttons = [
+  { name: '二進位', type: 'binary' },
+  { name: '方程式', type: 'equation' },
+  { name: '拼句子', type: 'words' },
+];
+
+class HomeScreen extends Component {
   state = {
     isDateTimePickerVisible: false,
     isInviting: false,
     date: '',
-    friend: '',
     // FIXME: 測試帳號
     text: 'terry623',
     isAlarmVisible: false,
+    selectedIndex: 0,
   };
 
   static navigationOptions = {
@@ -28,12 +41,22 @@ export default class HomeScreen extends Component {
   };
 
   sendInvitation = () => {
-    // FIXME: 為了測試
-    this.setState({ friend: this.state.text, isInviting: false });
+    const { socket, userName } = this.props;
+    const { date, text, selectedIndex } = this.state;
+
+    const currentTime = new Date();
+    const differenceInTime = date.getTime() - currentTime.getTime();
+
+    socket.emit(
+      'matchingRequest',
+      userName,
+      text,
+      buttons[selectedIndex].type,
+      differenceInTime
+    );
   };
 
   callAlarm = () => {
-    console.log(this.state.isAlarmVisible);
     this.setState({ isAlarmVisible: true });
   };
 
@@ -43,12 +66,15 @@ export default class HomeScreen extends Component {
 
   render() {
     const {
+      alarmDetail: { friend },
+    } = this.props;
+    const {
       isDateTimePickerVisible,
       isAlarmVisible,
       isInviting,
       date,
-      friend,
       text,
+      selectedIndex,
     } = this.state;
 
     return (
@@ -68,11 +94,18 @@ export default class HomeScreen extends Component {
                   !isInviting ? (
                     <Button
                       title="邀請"
-                      buttonStyle={styles.button}
                       onPress={() => this.setState({ isInviting: true })}
                     />
                   ) : (
                     <View>
+                      <ButtonGroup
+                        selectedButtonStyle={styles.selectButton}
+                        onPress={selectedIndex =>
+                          this.setState({ selectedIndex })
+                        }
+                        selectedIndex={selectedIndex}
+                        buttons={buttons.map(button => button.name)}
+                      />
                       <Input
                         placeholder="你朋友的帳號"
                         onChangeText={text => this.setState({ text })}
@@ -80,7 +113,6 @@ export default class HomeScreen extends Component {
                       />
                       <Button
                         containerStyle={styles.inviteButton}
-                        buttonStyle={styles.button}
                         title="送出"
                         onPress={this.sendInvitation}
                       />
@@ -97,11 +129,7 @@ export default class HomeScreen extends Component {
                         },
                       }}
                     />
-                    <Button
-                      title="直接響"
-                      buttonStyle={styles.button}
-                      onPress={this.callAlarm}
-                    />
+                    <Button title="直接響" onPress={this.callAlarm} />
                   </View>
                 )}
                 <Alarm
@@ -140,8 +168,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  button: {
-    backgroundColor: color.tintColor,
+  selectButton: {
+    backgroundColor: color.tabIconDefault,
   },
   contentContainer: {
     paddingTop: 150,
@@ -161,3 +189,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
+
+export default connect(state => ({
+  ...state.user,
+  ...state.alarm,
+}))(HomeScreen);

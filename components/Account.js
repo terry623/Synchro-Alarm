@@ -7,34 +7,34 @@ import color from '../constants/Colors';
 
 class Account extends Component {
   state = {
-    isAccountVisible: true,
-    toLogin: true,
+    toLoginPage: false,
     username: '',
     password: '',
   };
 
   signUpOrLogIn = () => {
-    const { toLogin, username, password } = this.state;
+    const { toLoginPage, username, password } = this.state;
     const { socket } = this.props;
 
-    toLogin
+    toLoginPage
       ? socket.emit('logIn', username, password)
       : socket.emit('register', username, password);
   };
 
   render() {
-    const { isAccountVisible, toLogin, username, password } = this.state;
+    const {  toLoginPage, username, password } = this.state;
+    const { isLogin } = this.props;
 
     return (
       <Overlay
         fullScreen
-        isVisible={isAccountVisible}
+        isVisible={!isLogin}
         containerStyle={styles.container}
       >
         <View style={styles.view}>
           <View style={styles.accountView}>
             <Text style={styles.title}>
-              {toLogin ? '會員登入' : '註冊會員'}
+              {toLoginPage ? '會員登入' : '註冊會員'}
             </Text>
             <Input
               placeholder="Username"
@@ -58,15 +58,14 @@ class Account extends Component {
               raised
               onPress={this.signUpOrLogIn}
               containerStyle={styles.buttonContainer}
-              buttonStyle={styles.button}
             />
             <View>
-              {toLogin ? (
+              {toLoginPage ? (
                 <Text style={styles.status}>
                   還沒有帳號嗎？
                   <Text
                     style={[styles.status, styles.link]}
-                    onPress={() => this.setState({ toLogin: false })}
+                    onPress={() => this.setState({ toLoginPage: false })}
                   >
                     註冊
                   </Text>
@@ -76,7 +75,7 @@ class Account extends Component {
                   已經有帳號了？
                   <Text
                     style={[styles.status, styles.link]}
-                    onPress={() => this.setState({ toLogin: true })}
+                    onPress={() => this.setState({ toLoginPage: true })}
                   >
                     登入
                   </Text>
@@ -101,9 +100,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 30,
     width: 120,
-  },
-  button: {
-    backgroundColor: color.tintColor,
   },
   childContainer: {
     marginTop: 30,
@@ -131,5 +127,5 @@ const styles = StyleSheet.create({
 });
 
 export default connect(state => ({
-  ...state.env,
+  ...state.user,
 }))(Account);

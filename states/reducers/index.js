@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import env from './env';
+import user from './user';
+import alarm from './alarm';
 
 export default combineReducers({
-  env,
+  user,
+  alarm,
 });
