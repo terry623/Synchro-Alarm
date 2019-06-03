@@ -1,28 +1,21 @@
-import {
-  SET_ALARM_DETAIL,
-  OPEN_ALARM,
-  SET_TOPIC,
-  SET_IS_ANSWER,
-} from '../actionTypes';
+import { ADD_ALARM, OPEN_ALARM, SET_QUESTION } from '../actionTypes';
 
 const initialState = {
+  alarms: [
+    // { user1, user2, questionType, alarmTime, alarmId }
+  ],
   isAlarmVisible: false,
-  alarmDetail: {
-    friend: '',
-    questionType: '',
-    alarmTime: '',
-    matchingId: '',
-    topic: '',
-  },
+  currentAlarmId: '',
+  currentQuestion: '',
 };
 
 const alarm = (state = initialState, action) => {
   switch (action.type) {
-    case SET_ALARM_DETAIL: {
-      const { alarmDetail } = action.payload;
+    case ADD_ALARM: {
+      const { newAlarm } = action.payload;
       return {
         ...state,
-        alarmDetail,
+        alarms: [...state.alarms, newAlarm],
       };
     }
     case OPEN_ALARM: {
@@ -32,14 +25,12 @@ const alarm = (state = initialState, action) => {
         isAlarmVisible,
       };
     }
-    case SET_TOPIC: {
-      const { topic } = action.payload;
+    case SET_QUESTION: {
+      const { alarmId, questionPart } = action.payload;
       return {
         ...state,
-        alarmDetail: {
-          ...state.alarmDetail,
-          topic,
-        },
+        currentAlarmId: alarmId,
+        currentQuestion: questionPart,
       };
     }
     default:

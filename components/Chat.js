@@ -3,22 +3,13 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import UUID from 'uuid/v4';
 import { connect } from 'react-redux';
 
-import { openAlarm } from '../states/actions';
-
 class Chat extends Component {
   state = {
     messages: [],
-    answer: '',
   };
 
   onSend(messages = []) {
-    const {
-      userName,
-      socket,
-      alarmDetail: { alarmId, topic },
-      friend,
-      openAlarm: openAlarmFromProps,
-    } = this.props;
+    const { userName, socket, currentAlarmId, friend } = this.props;
 
     const otherMessage = {
       _id: UUID(),
@@ -34,17 +25,7 @@ class Chat extends Component {
     messages.unshift(otherMessage);
 
     // FIXME: 現在第 0 個是其他人，之後會改掉 ( 目前為了測試 )
-    socket.emit('answer', userName, alarmId, messages[1].text);
-    // if (messages[1].text === answer) {
-    //   const systemMessage = {
-    //     _id: UUID(),
-    //     text: `正確 ! 答案是「${answer}」`,
-    //     createdAt: new Date(),
-    //     system: true,
-    //   };
-    //   messages.unshift(systemMessage);
-    //   setTimeout(() => openAlarmFromProps(false), 4000);
-    // }
+    socket.emit('answer', userName, currentAlarmId, messages[1].text);
 
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
@@ -52,10 +33,6 @@ class Chat extends Component {
   }
 
   render() {
-    const {
-      alarmDetail: { alarmId },
-    } = this.props;
-
     return (
       <GiftedChat
         messages={this.state.messages}
@@ -69,10 +46,7 @@ class Chat extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    ...state.user,
-    ...state.alarm,
-  }),
-  { openAlarm }
-)(Chat);
+export default connect(state => ({
+  ...state.user,
+  ...state.alarm,
+}))(Chat);

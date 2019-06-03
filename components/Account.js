@@ -5,6 +5,43 @@ import { connect } from 'react-redux';
 
 import color from '../constants/Colors';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  view: {
+    height: '100%',
+  },
+  buttonContainer: {
+    marginTop: 30,
+    width: 120,
+  },
+  childContainer: {
+    marginTop: 30,
+    width: '80%',
+  },
+  leftIcon: {
+    marginRight: 10,
+  },
+  accountView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+    marginTop: 40,
+  },
+  title: {
+    fontSize: 20,
+  },
+  status: {
+    fontSize: 12,
+    marginTop: 20,
+  },
+  link: {
+    color: color.tintColor,
+  },
+});
+
 class Account extends Component {
   state = {
     toLoginPage: false,
@@ -22,7 +59,7 @@ class Account extends Component {
   };
 
   render() {
-    const {  toLoginPage, username, password } = this.state;
+    const { toLoginPage, username, password } = this.state;
     const { isLogin } = this.props;
 
     return (
@@ -38,7 +75,7 @@ class Account extends Component {
             </Text>
             <Input
               placeholder="Username"
-              onChangeText={username => this.setState({ username })}
+              onChangeText={u => this.setState({ username: u })}
               value={username}
               leftIconContainerStyle={styles.leftIcon}
               containerStyle={styles.childContainer}
@@ -47,7 +84,7 @@ class Account extends Component {
             <Input
               placeholder="Password"
               secureTextEntry
-              onChangeText={password => this.setState({ password })}
+              onChangeText={p => this.setState({ password: p })}
               value={password}
               leftIconContainerStyle={styles.leftIcon}
               containerStyle={styles.childContainer}
@@ -88,43 +125,6 @@ class Account extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  view: {
-    height: '100%',
-  },
-  buttonContainer: {
-    marginTop: 30,
-    width: 120,
-  },
-  childContainer: {
-    marginTop: 30,
-    width: '80%',
-  },
-  leftIcon: {
-    marginRight: 10,
-  },
-  accountView: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 20,
-    marginTop: 40,
-  },
-  title: {
-    fontSize: 20,
-  },
-  status: {
-    fontSize: 12,
-    marginTop: 20,
-  },
-  link: {
-    color: color.tintColor,
-  },
-});
 
 export default connect(state => ({
   ...state.user,

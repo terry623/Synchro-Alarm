@@ -16,6 +16,7 @@ const theme = {
   },
 };
 
+/* eslint-disable */
 export default class App extends Component {
   render() {
     return (
@@ -27,3 +28,4 @@ export default class App extends Component {
     );
   }
 }
+/* eslint-enable */

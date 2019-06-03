@@ -2,9 +2,9 @@ import {
   SET_SOCKET,
   SET_LOGIN,
   SET_USERNAME,
-  SET_ALARM_DETAIL,
+  ADD_ALARM,
   OPEN_ALARM,
-  SET_TOPIC,
+  SET_QUESTION,
 } from './actionTypes';
 
 export const setSocket = socket => ({
@@ -22,9 +22,9 @@ export const setLogin = isLogin => ({
   payload: { isLogin },
 });
 
-export const setAlarmDetail = alarmDetail => ({
-  type: SET_ALARM_DETAIL,
-  payload: { alarmDetail },
+export const addAlarm = newAlarm => ({
+  type: ADD_ALARM,
+  payload: { newAlarm },
 });
 
 export const openAlarm = isAlarmVisible => ({
@@ -32,7 +32,7 @@ export const openAlarm = isAlarmVisible => ({
   payload: { isAlarmVisible },
 });
 
-export const setTopic = topic => ({
-  type: SET_TOPIC,
-  payload: { topic },
+export const setQuestion = ({ alarmId, questionPart }) => ({
+  type: SET_QUESTION,
+  payload: { alarmId, questionPart },
 });

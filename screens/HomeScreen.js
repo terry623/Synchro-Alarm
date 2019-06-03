@@ -1,18 +1,11 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import {
-  Icon,
-  Card,
-  Button,
-  Input,
-  ListItem,
-  ButtonGroup,
-} from 'react-native-elements';
+import { Icon, Card, Button, Input, ButtonGroup } from 'react-native-elements';
 import { connect } from 'react-redux';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import { openAlarm } from '../states/actions';
 import color from '../constants/Colors';
-import TimePicker from '../components/TimePicker';
 import Alarm from '../components/Alarm';
 
 const buttons = [
@@ -21,22 +14,55 @@ const buttons = [
   { name: '拼句子', type: 'words' },
 ];
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  selectButton: {
+    backgroundColor: color.tabIconDefault,
+  },
+  contentContainer: {
+    paddingTop: 50,
+  },
+  alarmContainer: {
+    alignItems: 'center',
+  },
+  alarmCard: {
+    width: 300,
+  },
+  createTimePickerContainer: {
+    alignItems: 'center',
+    bottom: 10,
+  },
+  inviteButton: {
+    marginTop: 15,
+  },
+});
+
 class HomeScreen extends Component {
+  static navigationOptions = {
+    header: null,
+  };
+
   state = {
     isDateTimePickerVisible: false,
     isInviting: false,
     date: '',
     text: '',
-    selectedIndex: 2,
+    selectedIndex: 0,
   };
 
-  static navigationOptions = {
-    header: null,
-  };
-
-  setAlarmDate = date => {
-    this.setState({ date });
+  addAlarm = date => {
     console.log('A date has been picked: ', date);
+    this.setState({
+      date,
+      isDateTimePickerVisible: false,
+    });
+  };
+
+  initInput = () => {
+    this.setState({ date: '', text: '', selectedIndex: 0 });
   };
 
   sendInvitation = () => {
@@ -53,13 +79,21 @@ class HomeScreen extends Component {
       buttons[selectedIndex].type,
       differenceInTime
     );
+
+    this.initInput();
   };
 
+  renderAllAlarmsFromStore = alarms =>
+    alarms.map(alarm => (
+      <Card
+        key={alarm.alarmId}
+        containerStyle={styles.alarmCard}
+        title={alarm.alarmId}
+      />
+    ));
+
   render() {
-    const {
-      alarmDetail: { friend },
-      openAlarm: openAlarmFromProps,
-    } = this.props;
+    const { alarms } = this.props;
     const {
       isDateTimePickerVisible,
       isInviting,
@@ -75,110 +109,64 @@ class HomeScreen extends Component {
           contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="handled"
         >
-          {date ? (
-            <View style={styles.alarmContainer}>
+          <View style={styles.alarmContainer}>
+            {this.renderAllAlarmsFromStore(alarms)}
+            {date ? (
               <Card
                 containerStyle={styles.alarmCard}
                 title={`${date.getHours()} 時 ${date.getMinutes()} 分`}
               >
-                {!friend ? (
-                  !isInviting ? (
-                    <Button
-                      title="邀請"
-                      onPress={() => this.setState({ isInviting: true })}
-                    />
-                  ) : (
-                    <View>
-                      <ButtonGroup
-                        selectedButtonStyle={styles.selectButton}
-                        onPress={selectedIndex =>
-                          this.setState({ selectedIndex })
-                        }
-                        selectedIndex={selectedIndex}
-                        buttons={buttons.map(button => button.name)}
-                      />
-                      <Input
-                        placeholder="你朋友的帳號"
-                        onChangeText={text => this.setState({ text })}
-                        value={text}
-                      />
-                      <Button
-                        containerStyle={styles.inviteButton}
-                        title="送出"
-                        onPress={this.sendInvitation}
-                      />
-                    </View>
-                  )
+                {!isInviting ? (
+                  <Button
+                    title="邀請"
+                    onPress={() => this.setState({ isInviting: true })}
+                  />
                 ) : (
                   <View>
-                    <ListItem
-                      title={friend}
-                      leftAvatar={{
-                        source: {
-                          uri:
-                            'https://semantic-ui.com/images/avatar/large/elliot.jpg',
-                        },
-                      }}
+                    <ButtonGroup
+                      selectedButtonStyle={styles.selectButton}
+                      onPress={s => this.setState({ selectedIndex: s })}
+                      selectedIndex={selectedIndex}
+                      buttons={buttons.map(button => button.name)}
+                    />
+                    <Input
+                      placeholder="你朋友的帳號"
+                      onChangeText={t => this.setState({ text: t })}
+                      value={text}
                     />
                     <Button
-                      title="直接響"
-                      onPress={() => openAlarmFromProps(true)}
+                      containerStyle={styles.inviteButton}
+                      title="送出"
+                      onPress={this.sendInvitation}
                     />
                   </View>
                 )}
               </Card>
-            </View>
-          ) : (
-            <View style={styles.createTimePickerContainer}>
-              <TimePicker
-                isDateTimePickerVisible={isDateTimePickerVisible}
-                hideDateTimePicker={() =>
-                  this.setState({ isDateTimePickerVisible: false })
-                }
-                setAlarmDate={this.setAlarmDate}
-              />
-              <Icon
-                reverse
-                name="ios-add"
-                type="ionicon"
-                color={color.buttonColor}
-                onPress={() => this.setState({ isDateTimePickerVisible: true })}
-              />
-            </View>
-          )}
+            ) : (
+              <></>
+            )}
+          </View>
           <Alarm />
         </ScrollView>
+        <View style={styles.createTimePickerContainer}>
+          <DateTimePicker
+            isVisible={isDateTimePickerVisible}
+            mode="time"
+            onConfirm={this.addAlarm}
+            onCancel={() => this.setState({ isDateTimePickerVisible: false })}
+          />
+          <Icon
+            reverse
+            name="ios-add"
+            type="ionicon"
+            color={color.buttonColor}
+            onPress={() => this.setState({ isDateTimePickerVisible: true })}
+          />
+        </View>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  selectButton: {
-    backgroundColor: color.tabIconDefault,
-  },
-  contentContainer: {
-    paddingTop: 150,
-  },
-  alarmContainer: {
-    alignItems: 'center',
-    marginTop: 15,
-    marginBottom: 20,
-  },
-  alarmCard: {
-    width: 300,
-  },
-  createTimePickerContainer: {
-    alignItems: 'center',
-  },
-  inviteButton: {
-    marginTop: 15,
-  },
-});
 
 export default connect(
   state => ({

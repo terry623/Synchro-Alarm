@@ -1,34 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Overlay, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import Chat from './Chat';
-
-class Alarm extends Component {
-  render() {
-    const {
-      isAlarmVisible,
-      alarmDetail: { topic },
-    } = this.props;
-
-    return (
-      <Overlay
-        fullScreen
-        isVisible={isAlarmVisible}
-        containerStyle={styles.container}
-      >
-        <View style={styles.view}>
-          <View style={styles.alarmView}>
-            <Text style={styles.title}>拼句子</Text>
-            <Text style={styles.topic}>{topic}</Text>
-          </View>
-          <Chat />
-        </View>
-      </Overlay>
-    );
-  }
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -46,11 +21,27 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
   },
-  topic: {
+  question: {
     paddingTop: 10,
     fontSize: 15,
   },
 });
+
+const Alarm = ({ isAlarmVisible, currentQuestion }) => (
+  <Overlay
+    fullScreen
+    isVisible={isAlarmVisible}
+    containerStyle={styles.container}
+  >
+    <View style={styles.view}>
+      <View style={styles.alarmView}>
+        <Text style={styles.title}>拼句子</Text>
+        <Text style={styles.question}>{currentQuestion}</Text>
+      </View>
+      <Chat />
+    </View>
+  </Overlay>
+);
 
 export default connect(state => ({
   ...state.alarm,
