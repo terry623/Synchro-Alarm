@@ -21,7 +21,7 @@ import Account from './Account';
 const io = require('socket.io-client');
 
 const SocketEndpoint = 'http://192.168.1.104:3000/';
-// const SocketEndpoint = 'https://synchro-alarm-server-dpwbnotiuz.now.sh';
+// const SocketEndpoint = 'https://synchro-alarm-server.now.sh/';
 
 const styles = StyleSheet.create({
   container: {

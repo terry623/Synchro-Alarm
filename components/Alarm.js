@@ -4,7 +4,6 @@ import { Overlay, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import questionType from '../constants/QuestionType';
-
 import Chat from './Chat';
 
 const styles = StyleSheet.create({
