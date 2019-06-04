@@ -11,7 +11,8 @@ import {
   setLogin,
   addAlarm,
   openAlarm,
-  setQuestion,
+  setCurrentAlarm,
+  appendMessage,
 } from '../states/actions';
 import AppNavigator from '../navigation/AppNavigator';
 import Account from './Account';
@@ -69,8 +70,9 @@ class Main extends Component {
       setUserName: setUserNameFromProps,
       setLogin: setLoginFromProps,
       openAlarm: openAlarmFromProps,
-      setQuestion: setQuestionFromProps,
+      setCurrentAlarm: setCurrentAlarmFromProps,
       addAlarm: addAlarmFromProps,
+      appendMessage: appendMessageFromProps,
     } = this.props;
 
     const socket = io(SocketEndpoint, {
@@ -128,13 +130,18 @@ class Main extends Component {
 
     socket.on('ring', response => {
       console.log('ring', response);
-      const { payload } = response;
+      const {
+        payload: { alarmId, question, friend },
+      } = response;
 
       openAlarmFromProps(true);
-      setQuestionFromProps({
-        alarmId: payload.alarmId,
-        questionPart: payload.questionPart,
-      });
+      setCurrentAlarmFromProps({ alarmId, question, friend });
+    });
+
+    socket.on('chat', response => {
+      console.log('chat', response);
+      const { msg } = response;
+      appendMessageFromProps(msg);
     });
 
     socket.on('answer', response => {
@@ -266,6 +273,7 @@ export default connect(
     setLogin,
     addAlarm,
     openAlarm,
-    setQuestion,
+    setCurrentAlarm,
+    appendMessage,
   }
 )(Main);

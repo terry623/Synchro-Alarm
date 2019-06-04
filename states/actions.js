@@ -4,7 +4,8 @@ import {
   SET_USERNAME,
   ADD_ALARM,
   OPEN_ALARM,
-  SET_QUESTION,
+  SET_CURRENT_ALARM,
+  APPEND_MESSAGE,
 } from './actionTypes';
 
 export const setSocket = socket => ({
@@ -32,7 +33,12 @@ export const openAlarm = isAlarmVisible => ({
   payload: { isAlarmVisible },
 });
 
-export const setQuestion = ({ alarmId, questionPart }) => ({
-  type: SET_QUESTION,
-  payload: { alarmId, questionPart },
+export const setCurrentAlarm = ({ alarmId, question, friend }) => ({
+  type: SET_CURRENT_ALARM,
+  payload: { alarmId, question, friend },
+});
+
+export const appendMessage = msg => ({
+  type: APPEND_MESSAGE,
+  payload: { msg },
 });

@@ -4,10 +4,11 @@ import {
   createStackNavigator,
   createBottomTabNavigator,
 } from 'react-navigation';
+import { Icon } from 'expo';
 
-import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import Colors from '../constants/Colors';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -15,9 +16,11 @@ const HomeStack = createStackNavigator({
 
 HomeStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
+    <Icon.Ionicons
       name={Platform.OS === 'ios' ? 'ios-alarm' : 'md-alarm'}
+      size={26}
+      style={{ marginBottom: -2 }}
+      color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
     />
   ),
 };
@@ -28,9 +31,11 @@ const SettingsStack = createStackNavigator({
 
 SettingsStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
+    <Icon.Ionicons
       name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      size={26}
+      style={{ marginBottom: -2 }}
+      color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
     />
   ),
 };

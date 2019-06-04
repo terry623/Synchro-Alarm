@@ -1,4 +1,11 @@
-import { ADD_ALARM, OPEN_ALARM, SET_QUESTION } from '../actionTypes';
+import { GiftedChat } from 'react-native-gifted-chat';
+
+import {
+  ADD_ALARM,
+  OPEN_ALARM,
+  SET_CURRENT_ALARM,
+  APPEND_MESSAGE,
+} from '../actionTypes';
 
 const initialState = {
   alarms: [
@@ -6,7 +13,9 @@ const initialState = {
   ],
   isAlarmVisible: false,
   currentAlarmId: '',
-  currentQuestion: '',
+  currentQuestion: { type: '', part: '' },
+  currentFriend: '',
+  currentMessages: [],
 };
 
 const alarm = (state = initialState, action) => {
@@ -25,12 +34,21 @@ const alarm = (state = initialState, action) => {
         isAlarmVisible,
       };
     }
-    case SET_QUESTION: {
-      const { alarmId, questionPart } = action.payload;
+    case SET_CURRENT_ALARM: {
+      const { alarmId, question, friend } = action.payload;
       return {
         ...state,
         currentAlarmId: alarmId,
-        currentQuestion: questionPart,
+        currentQuestion: question,
+        currentFriend: friend,
+        currentMessages: [],
+      };
+    }
+    case APPEND_MESSAGE: {
+      const { msg } = action.payload;
+      return {
+        ...state,
+        currentMessages: GiftedChat.append(state.currentMessages, msg),
       };
     }
     default:

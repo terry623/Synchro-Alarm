@@ -6,13 +6,8 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import { openAlarm } from '../states/actions';
 import color from '../constants/Colors';
+import questionType from '../constants/QuestionType';
 import Alarm from '../components/Alarm';
-
-const buttons = [
-  { name: '二進位', type: 'binary' },
-  { name: '方程式', type: 'equation' },
-  { name: '拼句子', type: 'words' },
-];
 
 const styles = StyleSheet.create({
   container: {
@@ -76,7 +71,7 @@ class HomeScreen extends Component {
       'matchingRequest',
       userName,
       text,
-      buttons[selectedIndex].type,
+      questionType[selectedIndex].type,
       differenceInTime
     );
 
@@ -127,7 +122,7 @@ class HomeScreen extends Component {
                       selectedButtonStyle={styles.selectButton}
                       onPress={s => this.setState({ selectedIndex: s })}
                       selectedIndex={selectedIndex}
-                      buttons={buttons.map(button => button.name)}
+                      buttons={questionType.map(button => button.name)}
                     />
                     <Input
                       placeholder="你朋友的帳號"
