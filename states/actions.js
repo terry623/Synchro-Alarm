@@ -6,6 +6,7 @@ import {
   OPEN_ALARM,
   SET_CURRENT_ALARM,
   APPEND_MESSAGE,
+  REMOVE_ALARM,
 } from './actionTypes';
 
 export const setSocket = socket => ({
@@ -41,4 +42,9 @@ export const setCurrentAlarm = ({ alarmId, question, friend }) => ({
 export const appendMessage = msg => ({
   type: APPEND_MESSAGE,
   payload: { msg },
+});
+
+export const removeAlarm = alarmId => ({
+  type: REMOVE_ALARM,
+  payload: { alarmId },
 });

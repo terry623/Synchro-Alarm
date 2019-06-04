@@ -5,3 +5,4 @@ export const ADD_ALARM = 'ADD_ALARM';
 export const OPEN_ALARM = 'OPEN_ALARM';
 export const SET_CURRENT_ALARM = 'SET_CURRENT_ALARM';
 export const APPEND_MESSAGE = 'APPEND_MESSAGE';
+export const REMOVE_ALARM = 'REMOVE_ALARM';

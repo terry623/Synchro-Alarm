@@ -18,6 +18,7 @@ const Chat = ({
         socket.emit(
           'answer',
           userName,
+          currentFriend,
           currentAlarmId,
           userMessage.text.replace('#', '')
         );

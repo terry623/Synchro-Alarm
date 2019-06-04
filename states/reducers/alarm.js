@@ -5,6 +5,7 @@ import {
   OPEN_ALARM,
   SET_CURRENT_ALARM,
   APPEND_MESSAGE,
+  REMOVE_ALARM,
 } from '../actionTypes';
 
 const initialState = {
@@ -49,6 +50,13 @@ const alarm = (state = initialState, action) => {
       return {
         ...state,
         currentMessages: GiftedChat.append(state.currentMessages, msg),
+      };
+    }
+    case REMOVE_ALARM: {
+      const { alarmId } = action.payload;
+      return {
+        ...state,
+        alarms: state.alarms.filter(a => a.alarmId !== alarmId),
       };
     }
     default:

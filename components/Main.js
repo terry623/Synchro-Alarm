@@ -13,6 +13,7 @@ import {
   openAlarm,
   setCurrentAlarm,
   appendMessage,
+  removeAlarm,
 } from '../states/actions';
 import AppNavigator from '../navigation/AppNavigator';
 import Account from './Account';
@@ -73,6 +74,7 @@ class Main extends Component {
       setCurrentAlarm: setCurrentAlarmFromProps,
       addAlarm: addAlarmFromProps,
       appendMessage: appendMessageFromProps,
+      removeAlarm: removeAlarmFromProps,
     } = this.props;
 
     const socket = io(SocketEndpoint, {
@@ -150,6 +152,7 @@ class Main extends Component {
 
       if (msg === 'success') {
         openAlarmFromProps(false);
+        removeAlarmFromProps(response.alarmId);
         this.setState({ isAnswer: true });
       }
     });
@@ -275,5 +278,6 @@ export default connect(
     openAlarm,
     setCurrentAlarm,
     appendMessage,
+    removeAlarm,
   }
 )(Main);
