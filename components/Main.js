@@ -3,6 +3,7 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Font, Icon } from 'expo';
 import { connect } from 'react-redux';
 import { Overlay, Text, Button } from 'react-native-elements';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import color from '../constants/Colors';
 import {
@@ -15,8 +16,9 @@ import {
   appendMessage,
   removeAlarm,
 } from '../states/actions';
-import AppNavigator from '../navigation/AppNavigator';
 import Account from './Account';
+import HomeScreen from '../screens/HomeScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
 const io = require('socket.io-client');
 
@@ -53,6 +55,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+const AppNavigator = createStackNavigator({
+  Home: {
+    screen: HomeScreen,
+  },
+  Setting: {
+    screen: SettingsScreen,
+  },
+});
+
+const AppContainer = createAppContainer(AppNavigator);
 
 class Main extends Component {
   state = {
@@ -229,7 +242,7 @@ class Main extends Component {
           </View>
         </Overlay>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
+        <AppContainer />
         <Account />
         <Overlay height={200} isVisible={beInvited}>
           <View style={styles.inviteBlock}>

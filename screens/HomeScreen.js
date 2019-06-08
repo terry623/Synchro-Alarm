@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Icon, Card, Button, Input, ButtonGroup } from 'react-native-elements';
+import {
+  Icon,
+  Card,
+  Button,
+  Input,
+  ButtonGroup,
+  Header,
+} from 'react-native-elements';
 import { connect } from 'react-redux';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
@@ -26,12 +33,11 @@ const styles = StyleSheet.create({
   alarmCard: {
     width: 300,
   },
-  createTimePickerContainer: {
-    alignItems: 'center',
-    bottom: 10,
-  },
   inviteButton: {
     marginTop: 15,
+  },
+  header: {
+    height: 80,
   },
 });
 
@@ -88,7 +94,7 @@ class HomeScreen extends Component {
     ));
 
   render() {
-    const { alarms } = this.props;
+    const { alarms, navigation } = this.props;
     const {
       isDateTimePickerVisible,
       isInviting,
@@ -99,6 +105,34 @@ class HomeScreen extends Component {
 
     return (
       <View style={styles.container}>
+        <Header
+          containerStyle={styles.header}
+          backgroundColor={color.mainColor}
+          leftComponent={
+            <Icon
+              name="settings"
+              type="material"
+              color="#fff"
+              size={28}
+              underlayColor="transparent"
+              onPress={() => navigation.navigate('Setting')}
+            />
+          }
+          centerComponent={{
+            text: 'Synchro Alarm',
+            style: { color: '#fff', fontSize: 21 },
+          }}
+          rightComponent={
+            <Icon
+              name="add"
+              type="material"
+              color="#fff"
+              size={32}
+              underlayColor="transparent"
+              onPress={() => this.setState({ isDateTimePickerVisible: true })}
+            />
+          }
+        />
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
@@ -143,21 +177,12 @@ class HomeScreen extends Component {
           </View>
           <Alarm />
         </ScrollView>
-        <View style={styles.createTimePickerContainer}>
-          <DateTimePicker
-            isVisible={isDateTimePickerVisible}
-            mode="time"
-            onConfirm={this.addAlarm}
-            onCancel={() => this.setState({ isDateTimePickerVisible: false })}
-          />
-          <Icon
-            reverse
-            name="ios-add"
-            type="ionicon"
-            color={color.buttonColor}
-            onPress={() => this.setState({ isDateTimePickerVisible: true })}
-          />
-        </View>
+        <DateTimePicker
+          isVisible={isDateTimePickerVisible}
+          mode="time"
+          onConfirm={this.addAlarm}
+          onCancel={() => this.setState({ isDateTimePickerVisible: false })}
+        />
       </View>
     );
   }

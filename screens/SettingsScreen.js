@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { View, StyleSheet } from 'react-native';
+import { ListItem, Header, Icon } from 'react-native-elements';
+
+import color from '../constants/Colors';
 
 const list = [
   {
@@ -29,19 +31,51 @@ const list = [
   },
 ];
 
+const styles = StyleSheet.create({
+  header: {
+    height: 80,
+  },
+  listItem: {
+    borderBottomColor: '#D1D1D6',
+    borderBottomWidth: 1,
+  },
+});
+
 export default class SettingsScreen extends Component {
   static navigationOptions = {
-    title: '設定',
+    header: null,
   };
 
   render() {
+    const { navigation } = this.props;
+
     return (
       <View>
+        <Header
+          containerStyle={styles.header}
+          backgroundColor={color.mainColor}
+          leftComponent={
+            <Icon
+              name="chevron-left"
+              type="material"
+              color="#fff"
+              size={32}
+              underlayColor="transparent"
+              onPress={() => navigation.navigate('Home')}
+            />
+          }
+          centerComponent={{
+            text: 'Setting',
+            style: { color: '#fff', fontSize: 21 },
+          }}
+        />
         {list.map((item, i) => (
           <ListItem
+            chevron
             key={i}
             title={item.title}
             leftIcon={{ name: item.icon, type: 'ionicon' }}
+            containerStyle={styles.listItem}
             onPress={() => undefined}
           />
         ))}
