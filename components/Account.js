@@ -73,7 +73,7 @@ class Account extends Component {
     return (
       <Overlay
         fullScreen
-        isVisible={isLogin}
+        isVisible={!isLogin}
         containerStyle={styles.container}
       >
         <View style={styles.view}>
