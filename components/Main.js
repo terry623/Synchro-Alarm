@@ -126,7 +126,7 @@ class Main extends Component {
     socket.on('matchingRequest', response => {
       console.log('matchingRequest', response);
 
-      if (typeof response === 'object') {
+      if (!response.msg) {
         const { user1, questionType, alarmTime, matchingId } = response;
         this.setState({
           beInvited: true,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Icon, Header } from 'react-native-elements';
+import { Icon, Header, Text } from 'react-native-elements';
 import { connect } from 'react-redux';
 
 import color from '../constants/Colors';
@@ -17,6 +17,9 @@ const styles = StyleSheet.create({
   },
   alarmContainer: {
     alignItems: 'center',
+  },
+  noAlarm: {
+    paddingTop: 15,
   },
   alarmCard: {
     width: '95%',
@@ -85,13 +88,19 @@ class HomeScreen extends Component {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.alarmContainer}>
-            {alarms.map(alarm => (
-              <MyCard
-                key={alarm.alarmId}
-                title={alarm.alarmTime}
-                subtitle={userName === alarm.user1 ? alarm.user2 : alarm.user1}
-              />
-            ))}
+            {alarms.length > 0 ? (
+              alarms.map(alarm => (
+                <MyCard
+                  key={alarm.alarmId}
+                  title={alarm.alarmTime}
+                  subtitle={
+                    userName === alarm.user1 ? alarm.user2 : alarm.user1
+                  }
+                />
+              ))
+            ) : (
+              <Text style={styles.noAlarm}>目前沒有鬧鐘</Text>
+            )}
           </View>
           <Alarm />
         </ScrollView>

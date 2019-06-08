@@ -4,7 +4,6 @@ import {
   Button,
   Input,
   ButtonGroup,
-  Text,
   Icon,
   Header,
 } from 'react-native-elements';
@@ -15,6 +14,14 @@ import questionType from '../constants/QuestionType';
 import color from '../constants/Colors';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  setupOption: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 280,
+  },
   header: {
     height: 80,
   },
@@ -22,7 +29,18 @@ const styles = StyleSheet.create({
     backgroundColor: color.mainColor,
   },
   inviteButton: {
+    backgroundColor: color.mainColor,
+  },
+  inviteButtonContainer: {
     marginTop: 15,
+    width: '40%',
+  },
+  setUpButton: {
+    marginTop: 30,
+    backgroundColor: 'transparent',
+  },
+  setUpTitleButton: {
+    color: color.mainColor,
   },
 });
 
@@ -47,8 +65,9 @@ class AlarmSetupScreen extends Component {
   };
 
   sendInvitation = () => {
-    const { socket, userName } = this.props;
+    const { socket, userName, navigation } = this.props;
     const { date, text, selectedIndex } = this.state;
+    if (date === '' || text === '') return;
 
     const currentTime = new Date();
     const differenceInTime = date.getTime() - currentTime.getTime();
@@ -62,6 +81,7 @@ class AlarmSetupScreen extends Component {
     );
 
     this.initInput();
+    navigation.navigate('Home');
   };
 
   initInput = () => {
@@ -73,7 +93,7 @@ class AlarmSetupScreen extends Component {
     const { isDateTimePickerVisible, date, text, selectedIndex } = this.state;
 
     return (
-      <View>
+      <View style={styles.container}>
         <Header
           containerStyle={styles.header}
           backgroundColor={color.mainColor}
@@ -92,32 +112,36 @@ class AlarmSetupScreen extends Component {
             style: { color: '#fff', fontSize: 21 },
           }}
         />
-        {date === '' ? (
+        <View style={styles.setupOption}>
           <Button
-            title="設定時間"
+            title={
+              date === ''
+                ? '設定時間'
+                : `${date.getHours()} 時 ${date.getMinutes()} 分`
+            }
+            type="clear"
+            buttonStyle={styles.setUpButton}
+            titleStyle={styles.setUpTitleButton}
             onPress={() => this.setState({ isDateTimePickerVisible: true })}
           />
-        ) : (
-          <Text>
-            {date.getHours()} 時 {date.getMinutes()} 分
-          </Text>
-        )}
-        <ButtonGroup
-          selectedButtonStyle={styles.selectButton}
-          onPress={s => this.setState({ selectedIndex: s })}
-          selectedIndex={selectedIndex}
-          buttons={questionType.map(button => button.name)}
-        />
-        <Input
-          placeholder="請輸入你朋友的帳號"
-          onChangeText={t => this.setState({ text: t })}
-          value={text}
-        />
-        <Button
-          containerStyle={styles.inviteButton}
-          title="送出"
-          onPress={this.sendInvitation}
-        />
+          <ButtonGroup
+            selectedButtonStyle={styles.selectButton}
+            onPress={s => this.setState({ selectedIndex: s })}
+            selectedIndex={selectedIndex}
+            buttons={questionType.map(button => button.name)}
+          />
+          <Input
+            placeholder="請輸入你朋友的帳號"
+            onChangeText={t => this.setState({ text: t })}
+            value={text}
+          />
+          <Button
+            containerStyle={styles.inviteButtonContainer}
+            buttonStyle={styles.inviteButton}
+            title="送出"
+            onPress={this.sendInvitation}
+          />
+        </View>
         <DateTimePicker
           isVisible={isDateTimePickerVisible}
           mode="time"
