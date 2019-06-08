@@ -15,6 +15,7 @@ import { openAlarm } from '../states/actions';
 import color from '../constants/Colors';
 import questionType from '../constants/QuestionType';
 import Alarm from '../components/Alarm';
+import MyCard from '../components/MyCard';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,13 +26,10 @@ const styles = StyleSheet.create({
     backgroundColor: color.tabIconDefault,
   },
   contentContainer: {
-    paddingTop: 50,
+    paddingTop: 10,
   },
   alarmContainer: {
     alignItems: 'center',
-  },
-  alarmCard: {
-    width: 300,
   },
   inviteButton: {
     marginTop: 15,
@@ -84,17 +82,17 @@ class HomeScreen extends Component {
     this.initInput();
   };
 
-  renderAllAlarmsFromStore = alarms =>
+  renderAllAlarmsFromStore = (userName, alarms) =>
     alarms.map(alarm => (
-      <Card
+      <MyCard
         key={alarm.alarmId}
-        containerStyle={styles.alarmCard}
-        title={alarm.alarmId}
+        title={alarm.alarmTime}
+        subtitle={userName === alarm.user1 ? alarm.user2 : alarm.user1}
       />
     ));
 
   render() {
-    const { alarms, navigation } = this.props;
+    const { alarms, userName, navigation } = this.props;
     const {
       isDateTimePickerVisible,
       isInviting,
@@ -139,7 +137,7 @@ class HomeScreen extends Component {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.alarmContainer}>
-            {this.renderAllAlarmsFromStore(alarms)}
+            {this.renderAllAlarmsFromStore(userName, alarms)}
             {date ? (
               <Card
                 containerStyle={styles.alarmCard}
