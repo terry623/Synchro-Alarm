@@ -32,10 +32,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   buttonGroup: {
-    marginTop: 'auto',
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: 15,
   },
   refuseButton: {
-    backgroundColor: color.tabIconDefault,
+    backgroundColor: color.errorBackground,
   },
   buttonContainer: {
     marginBottom: 10,
@@ -44,16 +46,29 @@ const styles = StyleSheet.create({
   inviteBlock: {
     flex: 1,
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   inviteMessageBlock: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 40,
+  },
+  inviteMessageBlockCorrect: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
   },
   inviteMessage: {
     marginBottom: 10,
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 14,
+  },
+  inviteMessageCorrect: {
+    marginBottom: 25,
+    textAlign: 'center',
+    fontSize: 18,
   },
 });
 
@@ -235,8 +250,8 @@ class Main extends Component {
       <View style={styles.container}>
         <Overlay height={200} isVisible={isAnswer}>
           <View style={styles.inviteBlock}>
-            <View style={styles.inviteMessageBlock}>
-              <Text style={styles.inviteMessage}>正確答案!</Text>
+            <View style={styles.inviteMessageBlockCorrect}>
+              <Text style={styles.inviteMessageCorrect}>正確答案!</Text>
               <Button
                 containerStyle={styles.buttonContainer}
                 title="關閉"
@@ -252,28 +267,28 @@ class Main extends Component {
           <View style={styles.inviteBlock}>
             <View style={styles.inviteMessageBlock}>
               <Text style={styles.inviteMessage}>
-                {friend}
-                邀請你參加
-                {questionType}
-                時間在
-                {alarmTime}
+                {friend} 邀請你一起設鬧鐘
               </Text>
-              {/* <Text style={styles.inviteMessage}>
-                {date.getHours()} 時 {date.getMinutes()} 分起床
-              </Text> */}
+              <Text style={styles.inviteMessage}>
+                時間為 {alarmTime}，題目為 {questionType}
+              </Text>
             </View>
             <View style={styles.buttonGroup}>
-              <Button
-                containerStyle={styles.buttonContainer}
-                title="同意"
-                onPress={() => this.replyMatch(true)}
-              />
-              <Button
-                containerStyle={styles.buttonContainer}
-                buttonStyle={styles.refuseButton}
-                title="拒絕"
-                onPress={() => this.replyMatch(false)}
-              />
+              <View style={{ width: '50%' }}>
+                <Button
+                  containerStyle={styles.buttonContainer}
+                  buttonStyle={styles.refuseButton}
+                  title="婉拒"
+                  onPress={() => this.replyMatch(false)}
+                />
+              </View>
+              <View style={{ width: '50%' }}>
+                <Button
+                  containerStyle={styles.buttonContainer}
+                  title="接受"
+                  onPress={() => this.replyMatch(true)}
+                />
+              </View>
             </View>
           </View>
         </Overlay>
