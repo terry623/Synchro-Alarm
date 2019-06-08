@@ -100,6 +100,7 @@ class HomeScreen extends Component {
                   subtitle={
                     userName === alarm.user1 ? alarm.user2 : alarm.user1
                   }
+                  alarmId={alarm.alarmId}
                 />
               ))
             ) : (

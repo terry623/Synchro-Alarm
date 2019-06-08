@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
   root: {
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const MyCard = ({ title, subtitle }) => (
+const MyCard = ({ title, subtitle, alarmId, socket }) => (
   <View style={styles.root}>
     <View style={styles.cardBody}>
       <View style={styles.bodyContent}>
@@ -88,11 +89,16 @@ const MyCard = ({ title, subtitle }) => (
       <TouchableOpacity style={styles.actionButton1}>
         <Text style={styles.actionText1}>Edit</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.actionButton2}>
+      <TouchableOpacity
+        style={styles.actionButton2}
+        onPress={() => socket.emit('delete', alarmId)}
+      >
         <Text style={styles.actionText2}>Delete</Text>
       </TouchableOpacity>
     </View>
   </View>
 );
 
-export default MyCard;
+export default connect(state => ({
+  ...state.user,
+}))(MyCard);

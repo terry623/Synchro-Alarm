@@ -190,6 +190,15 @@ class Main extends Component {
         this.setState({ isAnswer: true });
       }
     });
+
+    socket.on('delete', response => {
+      console.log('delete', response);
+      const { msg, alarmId } = response;
+
+      if (msg === 'alarm delete') {
+        removeAlarmFromProps(alarmId);
+      }
+    });
   }
 
   replyMatch = isAgree => {
