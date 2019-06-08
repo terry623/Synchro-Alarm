@@ -34,6 +34,7 @@ module.exports = {
     'react/no-access-state-in-setstate': 'off',
     'react/jsx-wrap-multilines': 'off',
     'react/prop-types': 'off',
+    'react/jsx-one-expression-per-line': 'off',
     'react/sort-prop-types': [
       'error',
       {

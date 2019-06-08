@@ -18,6 +18,7 @@ import {
 } from '../states/actions';
 import Account from './Account';
 import HomeScreen from '../screens/HomeScreen';
+import AlarmSetupScreen from '../screens/AlarmSetupScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const io = require('socket.io-client');
@@ -59,6 +60,9 @@ const styles = StyleSheet.create({
 const AppNavigator = createStackNavigator({
   Home: {
     screen: HomeScreen,
+  },
+  AlarmSetup: {
+    screen: AlarmSetupScreen,
   },
   Setting: {
     screen: SettingsScreen,
