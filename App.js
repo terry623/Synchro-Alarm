@@ -11,7 +11,7 @@ console.disableYellowBox = true;
 const theme = {
   Button: {
     buttonStyle: {
-      backgroundColor: color.tintColor,
+      backgroundColor: color.mainColor,
     },
   },
 };

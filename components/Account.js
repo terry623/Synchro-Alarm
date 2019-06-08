@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 30,
+    marginBottom: 20,
     width: 120,
   },
   childContainer: {
@@ -28,7 +29,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 20,
-    marginTop: 40,
+    marginTop: 80,
+  },
+  accountViewInput: {
+    width: '100%',
+    height: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontSize: 20,
@@ -38,7 +45,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   link: {
-    color: color.tintColor,
+    color: color.linkText,
   },
 });
 
@@ -47,6 +54,7 @@ class Account extends Component {
     toLoginPage: false,
     username: '',
     password: '',
+    passwordAgain: '',
   };
 
   signUpOrLogIn = () => {
@@ -59,7 +67,7 @@ class Account extends Component {
   };
 
   render() {
-    const { toLoginPage, username, password } = this.state;
+    const { toLoginPage, username, password, passwordAgain } = this.state;
     const { isLogin } = this.props;
 
     return (
@@ -71,25 +79,46 @@ class Account extends Component {
         <View style={styles.view}>
           <View style={styles.accountView}>
             <Text style={styles.title}>
-              {toLoginPage ? '會員登入' : '註冊會員'}
+              {toLoginPage ? '登入帳號' : '註冊帳號'}
             </Text>
-            <Input
-              placeholder="Username"
-              onChangeText={u => this.setState({ username: u })}
-              value={username}
-              leftIconContainerStyle={styles.leftIcon}
-              containerStyle={styles.childContainer}
-              leftIcon={<Icon name="user" type="antdesign" size={24} />}
-            />
-            <Input
-              placeholder="Password"
-              secureTextEntry
-              onChangeText={p => this.setState({ password: p })}
-              value={password}
-              leftIconContainerStyle={styles.leftIcon}
-              containerStyle={styles.childContainer}
-              leftIcon={<Icon name="lock1" type="antdesign" size={24} />}
-            />
+            <View style={styles.accountViewInput}>
+              <Input
+                placeholder="Username"
+                onChangeText={u => this.setState({ username: u })}
+                value={username}
+                leftIconContainerStyle={styles.leftIcon}
+                containerStyle={styles.childContainer}
+                leftIcon={<Icon name="user" type="antdesign" size={24} />}
+              />
+              <Input
+                placeholder="Password"
+                secureTextEntry
+                onChangeText={p => this.setState({ password: p })}
+                value={password}
+                leftIconContainerStyle={styles.leftIcon}
+                containerStyle={styles.childContainer}
+                leftIcon={<Icon name="lock1" type="antdesign" size={24} />}
+              />
+              {!toLoginPage ? (
+                <Input
+                  placeholder="Confirm Password"
+                  secureTextEntry
+                  onChangeText={p => this.setState({ passwordAgain: p })}
+                  value={passwordAgain}
+                  leftIconContainerStyle={styles.leftIcon}
+                  containerStyle={styles.childContainer}
+                  errorStyle={{ color: 'red' }}
+                  errorMessage={
+                    passwordAgain !== '' && password !== passwordAgain
+                      ? 'Passwords do not match'
+                      : ''
+                  }
+                  leftIcon={<Icon name="lock" type="antdesign" size={24} />}
+                />
+              ) : (
+                <></>
+              )}
+            </View>
             <Button
               title="送出"
               raised
