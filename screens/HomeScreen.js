@@ -92,7 +92,11 @@ class HomeScreen extends Component {
               alarms.map(alarm => (
                 <MyCard
                   key={alarm.alarmId}
-                  title={alarm.alarmTime}
+                  title={`${new Date(
+                    alarm.originTime
+                  ).getHours()} 時 ${new Date(
+                    alarm.originTime
+                  ).getMinutes()} 分`}
                   subtitle={
                     userName === alarm.user1 ? alarm.user2 : alarm.user1
                   }

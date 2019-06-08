@@ -77,7 +77,8 @@ class AlarmSetupScreen extends Component {
       userName,
       text,
       questionType[selectedIndex].type,
-      differenceInTime
+      differenceInTime,
+      currentTime
     );
 
     this.initInput();

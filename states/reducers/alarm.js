@@ -10,7 +10,7 @@ import {
 
 const initialState = {
   alarms: [
-    // { user1, user2, questionType, alarmTime, alarmId }
+    // { user1, user2, questionType, alarmTime, originTime, alarmId }
   ],
   isAlarmVisible: false,
   currentAlarmId: '',

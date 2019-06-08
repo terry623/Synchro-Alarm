@@ -93,8 +93,8 @@ class Main extends Component {
     beInvited: false,
     friend: '',
     questionType: '',
-    alarmTime: '',
     matchingId: '',
+    originTime: null,
   };
 
   componentDidMount() {
@@ -142,13 +142,15 @@ class Main extends Component {
       console.log('matchingRequest', response);
 
       if (!response.msg) {
-        const { user1, questionType, alarmTime, matchingId } = response;
+        const { user1, questionType, matchingId, originTime } = response;
+        const date = new Date(originTime);
+
         this.setState({
           beInvited: true,
           friend: user1,
           questionType,
-          alarmTime,
           matchingId,
+          originTime: date,
         });
       }
     });
@@ -234,11 +236,8 @@ class Main extends Component {
       isAnswer,
       friend,
       questionType,
-      alarmTime,
+      originTime,
     } = this.state;
-
-    // FIXME: 有錯
-    // const date = new Date((new Date().getTime() + alarmTime) * 1000);
 
     return !isLoadingComplete && !skipLoadingScreen ? (
       <AppLoading
@@ -270,7 +269,9 @@ class Main extends Component {
                 {friend} 邀請你一起設鬧鐘
               </Text>
               <Text style={styles.inviteMessage}>
-                時間為 {alarmTime}，題目為 {questionType}
+                {originTime
+                  ? `時間為 ${originTime.getHours()} 時 ${originTime.getMinutes()} 分，題目為 ${questionType}`
+                  : ''}
               </Text>
             </View>
             <View style={styles.buttonGroup}>
