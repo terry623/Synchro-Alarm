@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, ButtonGroup, Icon, Header } from 'react-native-elements';
+import { Button, ButtonGroup, Icon, Header, Text } from 'react-native-elements';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { connect } from 'react-redux';
 
 import questionType from '../constants/QuestionType';
+import questionDescription from '../constants/QuestionDescription';
 import color from '../constants/Colors';
 
 const styles = StyleSheet.create({
@@ -35,6 +36,11 @@ const styles = StyleSheet.create({
   },
   setUpTitleButton: {
     color: color.mainColor,
+  },
+  questionDescription: {
+    height: 100,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
 });
 
@@ -136,6 +142,11 @@ class AlarmEditScreen extends Component {
             selectedIndex={selectedIndex}
             buttons={questionType.map(button => button.name)}
           />
+          <View style={styles.questionDescription}>
+            <Text>{questionDescription[selectedIndex][0]}</Text>
+            <Text>{questionDescription[selectedIndex][1]}</Text>
+            <Text>{questionDescription[selectedIndex][2]}</Text>
+          </View>
           <Button
             containerStyle={styles.inviteButtonContainer}
             buttonStyle={styles.inviteButton}

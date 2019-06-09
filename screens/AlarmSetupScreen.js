@@ -6,11 +6,13 @@ import {
   ButtonGroup,
   Icon,
   Header,
+  Text,
 } from 'react-native-elements';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { connect } from 'react-redux';
 
 import questionType from '../constants/QuestionType';
+import questionDescription from '../constants/QuestionDescription';
 import color from '../constants/Colors';
 
 const styles = StyleSheet.create({
@@ -41,6 +43,11 @@ const styles = StyleSheet.create({
   },
   setUpTitleButton: {
     color: color.mainColor,
+  },
+  questionDescription: {
+    height: 100,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
 });
 
@@ -126,6 +133,11 @@ class AlarmSetupScreen extends Component {
             selectedIndex={selectedIndex}
             buttons={questionType.map(button => button.name)}
           />
+          <View style={styles.questionDescription}>
+            <Text>{questionDescription[selectedIndex][0]}</Text>
+            <Text>{questionDescription[selectedIndex][1]}</Text>
+            <Text>{questionDescription[selectedIndex][2]}</Text>
+          </View>
           <Input
             placeholder="請輸入你朋友的帳號"
             onChangeText={t => this.setState({ text: t })}
