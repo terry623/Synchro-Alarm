@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import color from '../constants/Colors';
 import questionType from '../constants/QuestionType';
+import questionDescription from '../constants/QuestionDescription';
 import Chat from './Chat';
 
 const styles = StyleSheet.create({
@@ -29,6 +30,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 20,
   },
+  description: {
+    paddingTop: 10,
+    fontSize: 15,
+  },
   question: {
     paddingTop: 15,
     fontSize: 35,
@@ -48,6 +53,13 @@ const Alarm = ({ isAlarmVisible, currentQuestion: { type, part } }) => (
         <Text style={styles.title}>
           {questionType.find(q => q.type === type)
             ? questionType.find(q => q.type === type).name
+            : ''}
+        </Text>
+        <Text style={styles.description}>
+          {questionType.find(q => q.type === type)
+            ? questionDescription[
+                questionType.findIndex(q => q.type === type)
+              ][2]
             : ''}
         </Text>
         <Text style={styles.question}>{part}</Text>
