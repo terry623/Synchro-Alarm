@@ -6,6 +6,13 @@ import { connect } from 'react-redux';
 import color from '../constants/Colors';
 import Alarm from '../components/Alarm';
 import MyCard from '../components/MyCard';
+import questionType from '../constants/QuestionType';
+
+import binaryImage from '../assets/images/binary.jpg';
+import equationImage from '../assets/images/equation.jpg';
+import wordsImage from '../assets/images/words.jpg';
+
+const images = [binaryImage, equationImage, wordsImage];
 
 const styles = StyleSheet.create({
   container: {
@@ -52,6 +59,7 @@ class HomeScreen extends Component {
 
   render() {
     const { alarms, userName, navigation } = this.props;
+
     return (
       <View style={styles.container}>
         <Header
@@ -102,6 +110,11 @@ class HomeScreen extends Component {
                   }
                   alarmId={alarm.alarmId}
                   navigation={navigation}
+                  image={
+                    images[
+                      questionType.findIndex(q => q.type === alarm.questionType)
+                    ]
+                  }
                 />
               ))
             ) : (

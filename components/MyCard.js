@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const MyCard = ({ title, subtitle, alarmId, navigation, socket }) => (
+const MyCard = ({ title, subtitle, alarmId, navigation, image, socket }) => (
   <View style={styles.root}>
     <View style={styles.cardBody}>
       <View style={styles.bodyContent}>
@@ -82,7 +82,7 @@ const MyCard = ({ title, subtitle, alarmId, navigation, socket }) => (
       </View>
       <Image
         style={styles.cardItemImagePlace}
-        source={require('../assets/images/icon.png')}
+        source={image}
       />
     </View>
     <View style={styles.actionBody}>
