@@ -24,8 +24,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 
 const io = require('socket.io-client');
 
-const SocketEndpoint = 'http://192.168.1.104:3000/';
-// const SocketEndpoint = 'https://synchro-alarm-server.now.sh/';
+// const SocketEndpoint = 'http://192.168.1.104:3000/';
+const SocketEndpoint = 'https://synchro-alarm-server.now.sh/';
 
 const styles = StyleSheet.create({
   container: {
