@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const MyCard = ({ title, subtitle, alarmId, socket }) => (
+const MyCard = ({ title, subtitle, alarmId, navigation, socket }) => (
   <View style={styles.root}>
     <View style={styles.cardBody}>
       <View style={styles.bodyContent}>
@@ -87,7 +87,12 @@ const MyCard = ({ title, subtitle, alarmId, socket }) => (
     </View>
     <View style={styles.actionBody}>
       <TouchableOpacity style={styles.actionButton1}>
-        <Text style={styles.actionText1}>Edit</Text>
+        <Text
+          style={styles.actionText1}
+          onPress={() => navigation.navigate('AlarmEdit', { alarmId })}
+        >
+          Edit
+        </Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.actionButton2}

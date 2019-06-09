@@ -23,6 +23,17 @@ const alarm = (state = initialState, action) => {
   switch (action.type) {
     case ADD_ALARM: {
       const { newAlarm } = action.payload;
+      const originAlarm = state.alarms.find(
+        a => a.alarmId === newAlarm.alarmId
+      );
+      if (originAlarm) {
+        return {
+          ...state,
+          alarms: state.alarms.map(a =>
+            a.alarmId === originAlarm.alarmId ? newAlarm : a
+          ),
+        };
+      }
       return {
         ...state,
         alarms: [...state.alarms, newAlarm],

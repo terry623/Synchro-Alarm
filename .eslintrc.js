@@ -22,6 +22,7 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'implicit-arrow-linebreak': 'off',
     'no-unused-expressions': 'off',
+    'function-paren-newline': 'off',
     'import/prefer-default-export': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/mouse-events-have-key-events': 'off',

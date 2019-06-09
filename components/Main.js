@@ -18,6 +18,7 @@ import {
 } from '../states/actions';
 import Account from './Account';
 import HomeScreen from '../screens/HomeScreen';
+import AlarmEditScreen from '../screens/AlarmEditScreen';
 import AlarmSetupScreen from '../screens/AlarmSetupScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
@@ -75,6 +76,9 @@ const styles = StyleSheet.create({
 const AppNavigator = createStackNavigator({
   Home: {
     screen: HomeScreen,
+  },
+  AlarmEdit: {
+    screen: AlarmEditScreen,
   },
   AlarmSetup: {
     screen: AlarmSetupScreen,
@@ -197,6 +201,15 @@ class Main extends Component {
 
       if (msg === 'alarm delete') {
         removeAlarmFromProps(alarmId);
+      }
+    });
+
+    socket.on('edit', response => {
+      console.log('edit', response);
+      const { msg, alarm } = response;
+
+      if (msg === 'alarm be editted') {
+        addAlarmFromProps(alarm);
       }
     });
   }
