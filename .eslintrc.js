@@ -36,6 +36,7 @@ module.exports = {
     'react/jsx-wrap-multilines': 'off',
     'react/prop-types': 'off',
     'react/jsx-one-expression-per-line': 'off',
+    'react/no-did-update-set-state': 'off',
     'react/sort-prop-types': [
       'error',
       {

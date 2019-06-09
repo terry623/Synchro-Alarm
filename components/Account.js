@@ -57,9 +57,31 @@ class Account extends Component {
     passwordAgain: '',
   };
 
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.userNameBeUsed !== this.props.userNameBeUsed &&
+      this.props.userNameBeUsed
+    ) {
+      this.setState({ requireMsg: '帳號已被使用' });
+    }
+  }
+
   signUpOrLogIn = () => {
-    const { toLoginPage, username, password } = this.state;
+    const { toLoginPage, username, password, passwordAgain } = this.state;
     const { socket } = this.props;
+    if (username === '') {
+      this.setState({ requireMsg: '請填寫此欄位' });
+      return;
+    }
+    if (password === '') {
+      this.setState({ requireMsg2: '請填寫此欄位' });
+      return;
+    }
+    if (passwordAgain === '') {
+      this.setState({ requireMsg3: '請填寫此欄位' });
+      return;
+    }
+    if (password !== passwordAgain) return;
 
     toLoginPage
       ? socket.emit('logIn', username, password)
@@ -67,8 +89,16 @@ class Account extends Component {
   };
 
   render() {
-    const { toLoginPage, username, password, passwordAgain } = this.state;
-    const { isLogin } = this.props;
+    const {
+      toLoginPage,
+      username,
+      password,
+      passwordAgain,
+      requireMsg,
+      requireMsg2,
+      requireMsg3,
+    } = this.state;
+    const { isLogin, userNameBeUsed } = this.props;
 
     return (
       <Overlay
@@ -88,6 +118,12 @@ class Account extends Component {
                 value={username}
                 leftIconContainerStyle={styles.leftIcon}
                 containerStyle={styles.childContainer}
+                errorStyle={{ color: 'red' }}
+                errorMessage={
+                  requireMsg && (username === '' || userNameBeUsed)
+                    ? requireMsg
+                    : ''
+                }
                 leftIcon={<Icon name="user" type="antdesign" size={24} />}
               />
               <Input
@@ -97,6 +133,8 @@ class Account extends Component {
                 value={password}
                 leftIconContainerStyle={styles.leftIcon}
                 containerStyle={styles.childContainer}
+                errorStyle={{ color: 'red' }}
+                errorMessage={requireMsg2 && password === '' ? requireMsg2 : ''}
                 leftIcon={<Icon name="lock1" type="antdesign" size={24} />}
               />
               {!toLoginPage ? (
@@ -109,8 +147,9 @@ class Account extends Component {
                   containerStyle={styles.childContainer}
                   errorStyle={{ color: 'red' }}
                   errorMessage={
-                    passwordAgain !== '' && password !== passwordAgain
-                      ? 'Passwords do not match'
+                    (requireMsg3 || passwordAgain !== '') &&
+                    password !== passwordAgain
+                      ? '密碼不一致'
                       : ''
                   }
                   leftIcon={<Icon name="lock" type="antdesign" size={24} />}

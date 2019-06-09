@@ -99,6 +99,7 @@ class Main extends Component {
     questionType: '',
     matchingId: '',
     originTime: null,
+    userNameBeUsed: false,
   };
 
   componentDidMount() {
@@ -123,8 +124,11 @@ class Main extends Component {
       console.log('register', response);
       const { msg, payload } = response;
       if (!payload) {
-        console.log(msg);
+        if (msg === 'userName already be used') {
+          this.setState({ userNameBeUsed: true });
+        }
       } else {
+        this.setState({ userNameBeUsed: false });
         setUserNameFromProps(payload.userName);
         setLoginFromProps(true);
       }
@@ -261,6 +265,7 @@ class Main extends Component {
       friend,
       questionType,
       originTime,
+      userNameBeUsed,
     } = this.state;
 
     return !isLoadingComplete && !skipLoadingScreen ? (
@@ -285,7 +290,7 @@ class Main extends Component {
         </Overlay>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <AppContainer />
-        <Account />
+        <Account userNameBeUsed={userNameBeUsed} />
         <Overlay height={200} isVisible={beInvited}>
           <View style={styles.inviteBlock}>
             <View style={styles.inviteMessageBlock}>
