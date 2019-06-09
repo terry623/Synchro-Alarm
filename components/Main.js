@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, Vibration } from 'react-native';
 import { AppLoading, Font, Icon } from 'expo';
 import { connect } from 'react-redux';
 import { Overlay, Text, Button } from 'react-native-elements';
@@ -176,6 +176,7 @@ class Main extends Component {
 
       openAlarmFromProps(true);
       setCurrentAlarmFromProps({ alarmId, question, friend });
+      Vibration.vibrate([1000], true);
     });
 
     socket.on('chat', response => {
@@ -192,6 +193,7 @@ class Main extends Component {
         openAlarmFromProps(false);
         removeAlarmFromProps(response.alarmId);
         this.setState({ isAnswer: true });
+        Vibration.cancel();
       }
     });
 
